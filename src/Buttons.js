@@ -3,8 +3,7 @@ import "./Buttons.css";
 
 function Buttons() {
   const inputRef = useRef(null);
-  const resultRef = useRef(null);
-  const [result, setResult] = useState(0);
+  const [setResult] = useState(0);
 
   function plus(e) {
     e.preventDefault();

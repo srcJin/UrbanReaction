@@ -131,7 +131,7 @@ export default class GridStorage {
     getSampleCoords(worldV) {
         const v = this.worldToGrid(worldV);
         if (this.vectorOutOfBounds(v, this.worldDimensions)) {
-            console.log("Tried to access out-of-bounds sample in grid");
+            // console.log("Tried to access out-of-bounds sample in grid");
             return Vector.zeroVector();
         }
         return new Vector(Math.floor(v.x / this.dsep), Math.floor(v.y / this.dsep));

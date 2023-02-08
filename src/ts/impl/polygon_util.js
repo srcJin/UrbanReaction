@@ -1,15 +1,9 @@
 // import * as log from 'loglevel';
 import * as PolyK from 'polyk';
 import Vector from '../vector';
-// import * as jsts from 'jsts';
-import {Polygonizer} from 'jsts/org/locationtech/jts/operation/polygonize.js'
-import BufferParameters from 'jsts/org/locationtech/jts/operation/buffer/BufferParameters.js'
-import {Coordinate,GeometryFactory} from 'jsts/org/locationtech/jts/geom.js'
-// import Polygon from 'jsts/org/locationtech/jts/geom/Polygon.js'
-
+import * as jsts from 'jsts';
 console.log("-------------------");
 console.log("polygon_util.ts running!");
-
 export default class PolygonUtil {
     /**
      * Slices rectangle by line, returning smallest polygon
@@ -40,11 +34,9 @@ export default class PolygonUtil {
             new Vector(origin.x, origin.y + worldDimensions.y),
         ];
         const boundingPoly = PolygonUtil.polygonToJts(bounds);
-        console.log("boundingPoly=",boundingPoly);
         const union = boundingPoly.getExteriorRing().union(jstsLine);
-        const polygonizer = new Polygonizer.Polygonizer();
+        const polygonizer = new jsts.operation.polygonize.Polygonizer();
         polygonizer.add(union);
-        
         const polygons = polygonizer.getPolygons();
         let smallestArea = Infinity;
         let smallestPoly;
@@ -64,8 +56,8 @@ export default class PolygonUtil {
         let total = 0;
         for (let i = 0; i < polygon.length; i++) {
             const addX = polygon[i].x;
-            const addY = polygon[i == polygon.length - 1 ? 0 : i + 1].y;
-            const subX = polygon[i == polygon.length - 1 ? 0 : i + 1].x;
+            const addY = polygon[i === polygon.length - 1 ? 0 : i + 1].y;
+            const subX = polygon[i === polygon.length - 1 ? 0 : i + 1].x;
             const subY = polygon[i].y;
             total += (addX * addY * 0.5);
             total -= (subX * subY * 0.5);
@@ -129,7 +121,7 @@ export default class PolygonUtil {
     static resizeGeometry(geometry, spacing, isPolygon = true) {
         try {
             const jstsGeometry = isPolygon ? PolygonUtil.polygonToJts(geometry) : PolygonUtil.lineToJts(geometry);
-            const resized = jstsGeometry.buffer(spacing, undefined, BufferParameters.CAP_FLAT);
+            const resized = jstsGeometry.buffer(spacing, undefined, jsts.operation.buffer.BufferParameters.CAP_FLAT);
             if (!resized.isSimple()) {
                 return [];
             }
@@ -159,7 +151,7 @@ export default class PolygonUtil {
         for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
             const xi = polygon[i].x, yi = polygon[i].y;
             const xj = polygon[j].x, yj = polygon[j].y;
-            const intersect = ((yi > point.y) != (yj > point.y))
+            const intersect = ((yi > point.y) !== (yj > point.y))
                 && (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi);
             if (intersect)
                 inside = !inside;
@@ -170,11 +162,11 @@ export default class PolygonUtil {
         return point.x >= origin.x && point.y >= origin.y && point.x <= dimensions.x && point.y <= dimensions.y;
     }
     static lineToJts(line) {
-        const coords = line.map(v => new Coordinate(v.x, v.y));
+        const coords = line.map(v => new jsts.geom.Coordinate(v.x, v.y));
         return PolygonUtil.geometryFactory.createLineString(coords);
     }
     static polygonToJts(polygon) {
-        const geoInput = polygon.map(v => new Coordinate(v.x, v.y));
+        const geoInput = polygon.map(v => new jsts.geom.Coordinate(v.x, v.y));
         geoInput.push(geoInput[0]); // Create loop
         return PolygonUtil.geometryFactory.createPolygon(PolygonUtil.geometryFactory.createLinearRing(geoInput), []);
     }
@@ -200,4 +192,4 @@ export default class PolygonUtil {
         return outP;
     }
 }
-PolygonUtil.geometryFactory = new GeometryFactory();
+PolygonUtil.geometryFactory = new jsts.geom.GeometryFactory();

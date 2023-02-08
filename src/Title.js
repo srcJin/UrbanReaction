@@ -1,8 +1,5 @@
-import { useState, useRef } from "react";
-
 function Title() {
 
-  const [result, setResult] = useState(0);
 
   return (
     <div className="Title">

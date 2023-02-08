@@ -62,7 +62,7 @@ export default class Graph {
                     }
                 }
                 else {
-                    console.log("Error Graph.js: segment with less than 2 nodes");
+                    // console.log("Error Graph.js: segment with less than 2 nodes");
                 }
             }
         }
