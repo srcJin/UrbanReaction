@@ -1,0 +1,195 @@
+// import * as log from 'loglevel';
+import * as PolyK from 'polyk';
+import Vector from '../vector';
+import * as jsts from 'jsts';
+console.log("-------------------");
+console.log("polygon_util.ts running!");
+export default class PolygonUtil {
+    /**
+     * Slices rectangle by line, returning smallest polygon
+     */
+    static sliceRectangle(origin, worldDimensions, p1, p2) {
+        const rectangle = [
+            origin.x, origin.y,
+            origin.x + worldDimensions.x, origin.y,
+            origin.x + worldDimensions.x, origin.y + worldDimensions.y,
+            origin.x, origin.y + worldDimensions.y,
+        ];
+        const sliced = PolyK.Slice(rectangle, p1.x, p1.y, p2.x, p2.y).map(p => PolygonUtil.polygonArrayToPolygon(p));
+        const minArea = PolygonUtil.calcPolygonArea(sliced[0]);
+        if (sliced.length > 1 && PolygonUtil.calcPolygonArea(sliced[1]) < minArea) {
+            return sliced[1];
+        }
+        return sliced[0];
+    }
+    /**
+     * Used to create sea polygon
+     */
+    static lineRectanglePolygonIntersection(origin, worldDimensions, line) {
+        const jstsLine = PolygonUtil.lineToJts(line);
+        const bounds = [
+            origin,
+            new Vector(origin.x + worldDimensions.x, origin.y),
+            new Vector(origin.x + worldDimensions.x, origin.y + worldDimensions.y),
+            new Vector(origin.x, origin.y + worldDimensions.y),
+        ];
+        const boundingPoly = PolygonUtil.polygonToJts(bounds);
+        const union = boundingPoly.getExteriorRing().union(jstsLine);
+        const polygonizer = new jsts.operation.polygonize.Polygonizer();
+        polygonizer.add(union);
+        const polygons = polygonizer.getPolygons();
+        let smallestArea = Infinity;
+        let smallestPoly;
+        for (let i = polygons.iterator(); i.hasNext();) {
+            const polygon = i.next();
+            const area = polygon.getArea();
+            if (area < smallestArea) {
+                smallestArea = area;
+                smallestPoly = polygon;
+            }
+        }
+        if (!smallestPoly)
+            return [];
+        return smallestPoly.getCoordinates().map((c) => new Vector(c.x, c.y));
+    }
+    static calcPolygonArea(polygon) {
+        let total = 0;
+        for (let i = 0; i < polygon.length; i++) {
+            const addX = polygon[i].x;
+            const addY = polygon[i == polygon.length - 1 ? 0 : i + 1].y;
+            const subX = polygon[i == polygon.length - 1 ? 0 : i + 1].x;
+            const subY = polygon[i].y;
+            total += (addX * addY * 0.5);
+            total -= (subX * subY * 0.5);
+        }
+        return Math.abs(total);
+    }
+    /**
+     * Recursively divide a polygon by its longest side until the minArea stopping condition is met
+     */
+    static subdividePolygon(p, minArea) {
+        const area = PolygonUtil.calcPolygonArea(p);
+        if (area < 0.5 * minArea) {
+            return [];
+        }
+        const divided = []; // Array of polygons
+        let longestSideLength = 0;
+        let longestSide = [p[0], p[1]];
+        let perimeter = 0;
+        for (let i = 0; i < p.length; i++) {
+            const sideLength = p[i].clone().sub(p[(i + 1) % p.length]).length();
+            perimeter += sideLength;
+            if (sideLength > longestSideLength) {
+                longestSideLength = sideLength;
+                longestSide = [p[i], p[(i + 1) % p.length]];
+            }
+        }
+        // Shape index
+        // Using rectangle ratio of 1:4 as limit
+        // if (area / perimeter * perimeter < 0.04) {
+        if (area / (perimeter * perimeter) < 0.04) {
+            return [];
+        }
+        if (area < 2 * minArea) {
+            return [p];
+        }
+        // Between 0.4 and 0.6
+        const deviation = (Math.random() * 0.2) + 0.4;
+        const averagePoint = longestSide[0].clone().add(longestSide[1]).multiplyScalar(deviation);
+        const differenceVector = longestSide[0].clone().sub(longestSide[1]);
+        const perpVector = (new Vector(differenceVector.y, -1 * differenceVector.x))
+            .normalize()
+            .multiplyScalar(100);
+        const bisect = [averagePoint.clone().add(perpVector), averagePoint.clone().sub(perpVector)];
+        // Array of polygons
+        try {
+            const sliced = PolyK.Slice(PolygonUtil.polygonToPolygonArray(p), bisect[0].x, bisect[0].y, bisect[1].x, bisect[1].y);
+            // Recursive call
+            for (const s of sliced) {
+                divided.push(...PolygonUtil.subdividePolygon(PolygonUtil.polygonArrayToPolygon(s), minArea));
+            }
+            return divided;
+        }
+        catch (error) {
+            console.log(error);
+            return [];
+        }
+    }
+    /**
+     * Shrink or expand polygon
+     */
+    static resizeGeometry(geometry, spacing, isPolygon = true) {
+        try {
+            const jstsGeometry = isPolygon ? PolygonUtil.polygonToJts(geometry) : PolygonUtil.lineToJts(geometry);
+            const resized = jstsGeometry.buffer(spacing, undefined, jsts.operation.buffer.BufferParameters.CAP_FLAT);
+            if (!resized.isSimple()) {
+                return [];
+            }
+            return resized.getCoordinates().map(c => new Vector(c.x, c.y));
+        }
+        catch (error) {
+            console.log(error);
+            return [];
+        }
+    }
+    static averagePoint(polygon) {
+        if (polygon.length === 0)
+            return Vector.zeroVector();
+        const sum = Vector.zeroVector();
+        for (const v of polygon) {
+            sum.add(v);
+        }
+        return sum.divideScalar(polygon.length);
+    }
+    static insidePolygon(point, polygon) {
+        // ray-casting algorithm based on
+        // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+        if (polygon.length === 0) {
+            return false;
+        }
+        let inside = false;
+        for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+            const xi = polygon[i].x, yi = polygon[i].y;
+            const xj = polygon[j].x, yj = polygon[j].y;
+            const intersect = ((yi > point.y) != (yj > point.y))
+                && (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi);
+            if (intersect)
+                inside = !inside;
+        }
+        return inside;
+    }
+    static pointInRectangle(point, origin, dimensions) {
+        return point.x >= origin.x && point.y >= origin.y && point.x <= dimensions.x && point.y <= dimensions.y;
+    }
+    static lineToJts(line) {
+        const coords = line.map(v => new jsts.geom.Coordinate(v.x, v.y));
+        return PolygonUtil.geometryFactory.createLineString(coords);
+    }
+    static polygonToJts(polygon) {
+        const geoInput = polygon.map(v => new jsts.geom.Coordinate(v.x, v.y));
+        geoInput.push(geoInput[0]); // Create loop
+        return PolygonUtil.geometryFactory.createPolygon(PolygonUtil.geometryFactory.createLinearRing(geoInput), []);
+    }
+    /**
+     * [ v.x, v.y, v.x, v.y ]...
+     */
+    static polygonToPolygonArray(p) {
+        const outP = [];
+        for (const v of p) {
+            outP.push(v.x);
+            outP.push(v.y);
+        }
+        return outP;
+    }
+    /**
+     * [ v.x, v.y, v.x, v.y ]...
+     */
+    static polygonArrayToPolygon(p) {
+        const outP = [];
+        for (let i = 0; i < p.length / 2; i++) {
+            outP.push(new Vector(p[2 * i], p[2 * i + 1]));
+        }
+        return outP;
+    }
+}
+PolygonUtil.geometryFactory = new jsts.geom.GeometryFactory();

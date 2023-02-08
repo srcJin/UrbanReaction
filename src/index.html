@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Map Generator</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body style="background-color:grey;">
+        <svg id="map-svg"></svg>
+        <div>
+            <canvas id="map-canvas"></canvas>  <!-- Must match util.ts and style.css -->
+            <canvas id="img-canvas"></canvas>
+        </div>
+        <script type="module" type="module" src="./ts/util.js"></script>
+        <script type="module" src="./ts/ui/domain_controller.js"></script>
+        <script type="module" src="./ts/impl/tensor.js"></script>
+        <script type="module" src="./ts/impl/basis_field.js"></script>
+        <script type="module" src="./ts/impl/polygon_util.js"></script>
+        <script type="module" src="./ts/impl/tensor_field.js"></script>
+        <script type="module" src="./ts/ui/tensor_field_gui.js"></script>
+        <script type="module" src="./ts/impl/integrator.js"></script>
+        <script type="module" src="./ts/impl/graph.js"></script>
+        <script type="module" src="./ts/impl/grid_storage.js"></script>
+        <script type="module" src="./ts/impl/streamlines.js"></script>
+        <script type="module" src="./ts/ui/road_gui.js"></script>
+        <script type="module" src="./ts/impl/water_generator.js"></script>
+        <script type="module" src="./ts/ui/water_gui.js"></script>
+        <script type="module" src="./ts/impl/polygon_finder.js"></script>
+        <script type="module" src="./ts/ui/canvas_wrapper.js"></script>
+        <script type="module" src="./ts/ui/style.js"></script>
+        <script type="module" src="./ts/ui/main_gui.js"></script>
+        <script type="module" src="./ts/ui/drag_controller.js"></script>
+        <script type="module" src="main.js"></script>
+        <script type="module" src="api.js"></script>
+        <script type="module" src="./ts/model_generator.js"></script>
+
+
+    </body>
+</html>
