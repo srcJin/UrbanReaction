@@ -8,7 +8,6 @@ import Canvas from './Canvas';
 import './style.css';
 import Spacer from './Spacer';
 
-
 const root1 = ReactDOM.createRoot(document.getElementById('root1'));
 const root2 = ReactDOM.createRoot(document.getElementById('root2'));
 const root3 = ReactDOM.createRoot(document.getElementById('root3'));
