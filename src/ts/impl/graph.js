@@ -62,7 +62,7 @@ export default class Graph {
                     }
                 }
                 else {
-                    // console.log("Error Graph.js: segment with less than 2 nodes");
+                    console.log("Error Graph.js: segment with less than 2 nodes");
                 }
             }
         }
@@ -103,7 +103,7 @@ export default class Graph {
         const differenceVector = end.clone().sub(start);
         step = Math.min(step, differenceVector.length() / 2); // Min of 2 step along vector
         const steps = Math.ceil(differenceVector.length() / step);
-        const differenceVectorLength = differenceVector.length();
+        // const differenceVectorLength = differenceVector.length();
         for (let i = 0; i <= steps; i++) {
             let currentPoint = start.clone().add(differenceVector.clone().multiplyScalar(i / steps));
             // Order nodes, not by 'closeness', but by dot product

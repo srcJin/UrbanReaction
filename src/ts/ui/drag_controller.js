@@ -98,6 +98,8 @@ export default class DragController {
             if (index >= 0) {
                 this.draggables.splice(index, 1);
             }
-        }).bind(this);
+        // }).bind(this);
+    });
+
     }
 }
