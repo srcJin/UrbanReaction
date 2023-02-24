@@ -13,9 +13,9 @@ console.log("--------------------");
 console.log("main.ts is running");
 class MainGenerator {
     constructor() {
-        this.STARTING_WIDTH = 1440; // Initially zooms in if width > STARTING_WIDTH
+        this.STARTING_WIDTH = 500; // Initially zooms in if width > STARTING_WIDTH
         // UI
-        this.gui = new dat.GUI({ width: 400 });
+        this.gui = new dat.GUI({ width: 300 });
         // private downloadsFolder: dat.GUI;
         // private domainController = DomainController.getInstance();
         this.dragController = new DragController(this.gui);
@@ -44,7 +44,8 @@ class MainGenerator {
         // Canvas setup
         this.canvas = document.getElementById(Util.CANVAS_ID);
         this.tensorCanvas = new DefaultCanvasWrapper(this.canvas);
-        // // Make sure we're not too zoomed out for large resolutions
+        // Make sure we're not too zoomed out for large resolutions
+        console.log("this.domainController=",this.domainController)
         // const screenWidth = this.domainController.screenDimensions.x;
         // if (screenWidth > this.STARTING_WIDTH) {
         //     this.domainController.zoom = screenWidth / this.STARTING_WIDTH;

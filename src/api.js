@@ -1,4 +1,6 @@
 import { myGenerator } from "./main";
+import Vector from './ts/vector';
+
 console.log("api.ts is running");
 export function sayHello() {
     console.log("calling api.ts sayHello()!");
@@ -28,9 +30,10 @@ function exportToJsonFile(jsonData, filename) {
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
 }
-export async function myGenerateAll() {
+
+export function myGenerateAll() {
     myGenerator.mySetFirstGenerateFalse();
-    const results = await myGenerator.myGenerate();
+    const results =  myGenerator.myGenerate();
     console.log("results=", results);
     const coastline = results.coastline;
     const seaPolygon = results.seaPolygon;
@@ -69,36 +72,43 @@ export async function myGenerateAll() {
     jsonPackage["blocks"] = blocks;
     console.log("jsonPackage=", jsonPackage);
     // save to package.json
-    exportToJsonFile([jsonPackage], "jsonPackage");
-    return undefined;
+    // exportToJsonFile([jsonPackage], "jsonPackage");
+    return jsonPackage;
     // generate inside this function
 }
-setTimeout(() => {
-    console.log("myGenerateAll");
-    myGenerateAll();
-}, 2000);
-// setTimeout(() =>
-// {
-//     console.log("myAddRadial");
-//     myAddRadial(new Vector(400,400), 400, 10)
-// },
-// 2000);
-// setTimeout(() =>
-// {
-//     console.log("myAddGrid");
-//     myAddGrid(new Vector(800,800), 100 , 1 ,0.5)
-// },
-// 3000);
-// setTimeout(() =>
-// {
-//     console.log("myAddRadial2");
-//     myAddRadial(new Vector(600,300), 300, 8)
-// },
-// 4000);
-// // doesn't work for now
-// setTimeout(() =>
-// {
-//     console.log("myRemoveLastField");
-//     myRemoveLastField()
-// },
-// 5000);
+
+export function testAPI() {
+setTimeout(() =>
+{
+    console.log("myAddRadial");
+    myAddRadial(new Vector(400,400), 400, 10)
+},
+2000);
+setTimeout(() =>
+{
+    console.log("myAddGrid");
+    myAddGrid(new Vector(800,800), 100 , 1 ,0.5)
+},
+3000);
+setTimeout(() =>
+{
+    console.log("myAddRadial2");
+    myAddRadial(new Vector(600,300), 300, 8)
+},
+4000);
+// doesn't work for now
+setTimeout(() =>
+{
+    console.log("myRemoveLastField");
+    myRemoveLastField()
+},
+5000);
+}
+
+export function exportJsonDelayed() {
+    setTimeout(() => {
+        console.log("myGenerateAll");
+        let jsonPackage = myGenerateAll();
+        exportToJsonFile([jsonPackage], "jsonPackage");
+    }, 2000);
+}

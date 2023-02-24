@@ -24,6 +24,7 @@ export default class DomainController {
         this._orthographic = false;
         // Set after pan or zoom
         this.moved = false;
+        // disable dimension change
         this.setScreenDimensions();
         window.addEventListener('resize', () => this.setScreenDimensions());
         window.addEventListener('wheel', (e) => {
