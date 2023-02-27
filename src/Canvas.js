@@ -4,7 +4,7 @@ import { testAPI, exportJsonDelayed, myGenerateAll } from "./api";
 import { myGenerator } from "./main";
 import { renderer, animate, scene } from "./renderer";
 import { convertJSONToMeshes,convertJSONToPolyline } from "./renderer/loadGenerated.js";
-
+import { buildingMaterial, coastlineMaterial, greenMaterial, majorRoadMaterial, minorRoadMaterial, waterMaterial } from "./renderer/Materials.js"
 
 class Canvas extends Component {
   async componentDidMount() {
@@ -19,12 +19,18 @@ class Canvas extends Component {
     let jsonPackage = await myGenerateAll()
     console.log("jsonPackage=", jsonPackage);
     // exportJsonDelayed();
-    scene.add(convertJSONToMeshes(jsonPackage.blocks, true));
-    scene.add(convertJSONToMeshes(jsonPackage.seaPolygon, false));
-    // scene.add(convertJSONToMeshes(jsonPackage.bigParks, false));
-    // scene.add(convertJSONToMeshes(jsonPackage.smallParks, false));
-    scene.add(convertJSONToPolyline(jsonPackage.majorRoads,4))
-    scene.add(convertJSONToPolyline(jsonPackage.mainRoads,4))
+    scene.add(convertJSONToMeshes(jsonPackage.blocks, true, buildingMaterial ));
+    scene.add(convertJSONToMeshes(jsonPackage.seaPolygon, false, waterMaterial  ));
+    scene.add(convertJSONToMeshes(jsonPackage.river, false, waterMaterial));
+    scene.add(convertJSONToMeshes(jsonPackage.bigParks, false, greenMaterial));
+    scene.add(convertJSONToMeshes(jsonPackage.smallParks, false, greenMaterial));
+
+    scene.add(convertJSONToPolyline(jsonPackage.majorRoads, majorRoadMaterial))
+    scene.add(convertJSONToPolyline(jsonPackage.minorRoads, minorRoadMaterial))
+    scene.add(convertJSONToPolyline(jsonPackage.mainRoads, majorRoadMaterial))
+    scene.add(convertJSONToPolyline(jsonPackage.coastline, coastlineMaterial)) 
+
+
     //
     // three js renderer
     //
