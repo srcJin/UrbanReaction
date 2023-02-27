@@ -128,39 +128,31 @@ export function getPoint(Vector3, material = pointMaterialRed) {
     return point;
 }
 
-export function setMesh(cell, height, mat) {
-    let material;
+export function setMesh(cell, height, material) {
     //console.log("mat=" , mat)
-    mat = new THREE.MeshPhongMaterial({
-        color: 0xf5f5f5,
-        transparent: false,
-        opacity: 1,
-    });
 
-    if (mat == undefined) {
-        const mat_1 = new THREE.MeshPhongMaterial({
-            color: 0x364f6b,
-            transparent: false,
-            opacity: 1,
-        });
-        const mat_2 = new THREE.MeshPhongMaterial({
-            color: 0x3fc1c9,
-            transparent: false,
-            opacity: 1,
-        });
-        const mat_3 = new THREE.MeshPhongMaterial({
+    if (material === undefined) {
+    //     const mat_1 = new THREE.MeshPhongMaterial({
+    //         color: 0x364f6b,
+    //         transparent: false,
+    //         opacity: 1,
+    //     });
+    //     const mat_2 = new THREE.MeshPhongMaterial({
+    //         color: 0x3fc1c9,
+    //         transparent: false,
+    //         opacity: 1,
+    //     });
+        const material = new THREE.MeshPhongMaterial({
             color: 0xf5f5f5,
             transparent: false,
             opacity: 1,
         });
-        const mat_4 = new THREE.MeshPhongMaterial({
-            color: 0xfc5185,
-            transparent: false,
-            opacity: 1,
-        });
-        material = mat_3;
-    } else {
-        material = mat;
+    //     const mat_4 = new THREE.MeshPhongMaterial({
+    //         color: 0xfc5185,
+    //         transparent: false,
+    //         opacity: 1,
+    //     });
+    //     material = mat_3;
     }
 
     var extrudeSettings = {

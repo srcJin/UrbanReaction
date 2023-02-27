@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+import { LineMaterial } from "three/addons/lines/LineMaterial.js";
 
 var lineMaterial = new THREE.LineBasicMaterial({
   color: 0x000000,
@@ -123,23 +123,59 @@ export var pointMaterialPurple = new THREE.PointsMaterial({
   opacity: 1.0
 });
 
-export var buildingMaterial = 
+export const buildingMaterial = 
     new THREE.MeshPhongMaterial({
        color : 0xE1E1E1, 
        transparent: false, 
        opacity: 1 
 })
 
-export var greenMaterial = 
+export const greenMaterial = 
     new THREE.MeshPhongMaterial({
-       color : 0x7bcbb4, 
+       color : 0xbadc6f, 
        transparent: false, 
        opacity: 1 
 })
 
-export var waterMaterial = 
+export const waterMaterial = 
     new THREE.MeshPhongMaterial({
-       color : 0x118AB2, 
+       color : 0x89cff0, 
        transparent: false, 
        opacity: 1 
 })
+
+
+export const majorRoadMaterial = new LineMaterial({
+  color: 0xec5f6b,
+  linewidth: 5, // in pixels
+  resolution: 1, // set the resolution of the derivative in pixels
+  dashed: false,
+})
+
+export const mainRoadMaterial = new LineMaterial({
+  color: 0xffa366,
+  linewidth: 5, // in pixels
+  resolution: 1, // set the resolution of the derivative in pixels
+  dashed: false,
+})
+
+export const minorRoadMaterial = new LineMaterial({
+  color: 0xffd166,
+  linewidth: 5, // in pixels
+  resolution: 1, // set the resolution of the derivative in pixels
+  dashed: false,
+})
+
+export const coastlineMaterial = new LineMaterial({
+  color: 0x6bae9c,
+  linewidth: 5, // in pixels
+  resolution: 1, // set the resolution of the derivative in pixels
+  dashed: false,
+})
+
+
+export const mat_4 = new THREE.MeshPhongMaterial({
+    color: 0xfc5185,
+    transparent: false,
+    opacity: 1,
+});

@@ -213,6 +213,7 @@ export default class MainGUI {
         await this.minorRoads.generateRoads(this.animate);
         this.redraw = true;
         await this.buildings.generate(this.animate);
+        console.log("generateEverything(),this=",this)
         return {
             coastline: this.coastline.coastline,
             seaPolygon: this.coastline.seaPolygon,

@@ -1,16 +1,23 @@
 import { useState, useRef } from "react";
 import "./Buttons.css";
 
+// the buttons is a parent component
+// the canvas is a child component
+
+
+
 function Buttons() {
   const inputRef = useRef(null);
   const [setResult] = useState(0);
 
   function plus(e) {
     e.preventDefault();
-    setResult((result) => result + Number(inputRef.current.value));
   }
 
-
+  function refresh(e) {
+    e.preventDefault();
+    setResult((result) => result + Number(inputRef.current.value));
+  }
 
   return (
     <div className="Buttons">
@@ -36,7 +43,7 @@ function Buttons() {
         <button onClick={plus}>line</button>
         <button onClick={plus}>curve</button>
         <button onClick={plus}>star</button>
-        <button onClick={plus}>reset</button>
+        <button onClick={refresh}>refresh</button>
       {/* </form> */}
     </div>
   );

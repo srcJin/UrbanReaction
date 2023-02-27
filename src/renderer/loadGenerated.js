@@ -55,13 +55,13 @@ function convertGeneratedPointListToThreeVectorList(list, scale = 1) {
 
 export function convertJSONToPolyline(
   object,
-  scale = 1,
   material = new LineMaterial({
     color: 0xff0000,
     linewidth: 5, // in pixels
     resolution: 1, // set the resolution of the derivative in pixels
     dashed: false,
-  })
+  }),
+  scale = 4
 ) {
   // console.log("object=",object);
 
@@ -75,14 +75,14 @@ export function convertJSONToPolyline(
   return group;
 }
 
-export function convertJSONToMeshes(object, isBuilding = false, material) {
+export function convertJSONToMeshes(object, isBuilding = false, material, scale = 4 ) {
   let blocksThree = convertGeneratedPointListToThreeVectorList(object, scale);
   readNearbyPoints(blocksThree, 300);
   let output = redrawGeneratedMeshes(blocksThree, isBuilding, material);
   return output;
 }
 
-function redrawGeneratedMeshes(blocksThree, isBuilding = true, material) {
+function redrawGeneratedMeshes(blocksThree, isBuilding, material) {
   //console.log("------------------------------------")
   //console.log("redrawBuildings!!!!!!!!!!!!!")
 

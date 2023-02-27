@@ -59,9 +59,9 @@ export async function myGenerateAll() {
         intersections: intersections,
         blocks: blocks
     };
-    jsonPackage["coastline"] = coastline;
-    jsonPackage["seaPolygon"] = seaPolygon;
-    jsonPackage["river"] = river;
+    jsonPackage["coastline"] = [coastline]; // coastline here is only an array, so need to put inside an array to read normally
+    jsonPackage["seaPolygon"] = [seaPolygon]; // seaPolygon here is only an array, so need to put inside an array to read normally
+    jsonPackage["river"] = [river]; // river here is only an array, so need to put inside an array to read normally
     jsonPackage["secondaryRiver"] = secondaryRiver;
     jsonPackage["majorRoads"] = majorRoads;
     jsonPackage["mainRoads"] = mainRoads;
