@@ -3,8 +3,15 @@ import "./Buttons.css";
 
 // the buttons is a parent component
 // the canvas is a child component
+import {ChildComponent} from "./ChildComponent.js";
 
-
+// this is a functional way to create react conponents
+// Notice that we didn't declare a class, 
+// but rather defined a simple function called Button. 
+// This is the functional way of creating React components. 
+// In fact, when the purpose of your component is purely 
+// to render some user interface elements with or without any props, 
+// then it's recommended that you use this approach.
 
 function Buttons() {
   const inputRef = useRef(null);
@@ -12,12 +19,14 @@ function Buttons() {
 
   function plus(e) {
     e.preventDefault();
+    setResult((result) => result + Number(inputRef.current.value));
+
   }
 
   function refresh(e) {
-    e.preventDefault();
-    setResult((result) => result + Number(inputRef.current.value));
+    console.log("hello refresh")
   }
+
 
   return (
     <div className="Buttons">
@@ -44,6 +53,7 @@ function Buttons() {
         <button onClick={plus}>curve</button>
         <button onClick={plus}>star</button>
         <button onClick={refresh}>refresh</button>
+
       {/* </form> */}
     </div>
   );

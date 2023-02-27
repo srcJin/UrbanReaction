@@ -9,10 +9,7 @@ import { LineMaterial } from "three/addons/lines/LineMaterial.js";
 import { LineGeometry } from "three/addons/lines/LineGeometry.js";
 import * as GeometryUtils from "three/addons/utils/GeometryUtils.js";
 import { weightGrid } from "./renderer/UrbanLayer.js";
-import blocks from "./renderer/generated/blocks.json";
-import majorRoads from "./renderer/generated/majorRoads.json";
-import mainRoads from "./renderer/generated/mainRoads.json";
-import seaPolygon from "./renderer/generated/seaPolygon.json";
+
 import {
     getCurve,
     getCircle,
