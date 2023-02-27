@@ -5,7 +5,7 @@ import { myGenerator } from "./main";
 import { renderer, animate, scene } from "./renderer";
 import { convertJSONToMeshes,convertJSONToPolyline } from "./renderer/loadGenerated.js";
 import { buildingMaterial, coastlineMaterial, greenMaterial, majorRoadMaterial, minorRoadMaterial, waterMaterial } from "./renderer/Materials.js"
-
+import { jsonPackage } from "./api";
 export class Canvas extends React.Component {
 
   hello() {
@@ -16,11 +16,11 @@ export class Canvas extends React.Component {
     console.log("refreshing 3d")
     // remove meshes from scene, keep lights
     for (let i = scene.children.length - 1; i >= 0; i--) {
-      console.log(scene);
+      // console.log(scene);
       if(scene.children[i].type === ("Group" || "Line2" || "Points"|| "Points" || "Mesh"))
           scene.remove(scene.children[i]);
   }
-    console.log("new jsonPackage = ", jsonPackage);
+    console.log("Canvas refresh jsonPackage = ", jsonPackage);
     scene.add(convertJSONToMeshes(jsonPackage.blocks, true, buildingMaterial ));
     scene.add(convertJSONToMeshes(jsonPackage.seaPolygon, false, waterMaterial  ));
     scene.add(convertJSONToMeshes(jsonPackage.river, false, waterMaterial));
@@ -46,8 +46,17 @@ export class Canvas extends React.Component {
     console.log("myGenerator.tensorField", myGenerator.tensorField);
     // running api.js
     // await testAPI()
-    let jsonPackage = await myGenerateAll()
     console.log("jsonPackage=", jsonPackage);
+    let generate = await myGenerateAll()
+    
+    // clear jsonPackage
+
+    for (let key in jsonPackage) {
+      console.log("key=",key);
+      jsonPackage[key] = []
+      jsonPackage[key] = generate[key]
+    }
+
     // exportJsonDelayed();
     scene.add(convertJSONToMeshes(jsonPackage.blocks, true, buildingMaterial ));
     scene.add(convertJSONToMeshes(jsonPackage.seaPolygon, false, waterMaterial  ));

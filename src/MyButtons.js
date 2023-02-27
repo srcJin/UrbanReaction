@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import { myGenerateAll } from "./api";
 
 import {Canvas} from "./Canvas";
-
+import { jsonPackage } from "./api";
 class LikeButton extends React.Component {
   constructor(props) {
     super(props);
@@ -35,7 +35,13 @@ class RefreshButton extends React.Component {
     const canvas = new Canvas();
     // Call the hello() function on the Canvas component
     canvas.hello();
-    let jsonPackage = await myGenerateAll();
+    let generate = await myGenerateAll();
+    // clear jsonPackage
+    for (let key in jsonPackage) {
+      console.log("key=", key);
+      jsonPackage[key] = generate[key];
+    }
+
     console.log("RefreshButton jsonPackage = ",jsonPackage);
     canvas.refresh(jsonPackage);
     this.setState({ message: "Refresh 3D" });
