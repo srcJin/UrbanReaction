@@ -76,8 +76,7 @@ export function convertJSONToPolyline(
 }
 
 export function convertJSONToMeshes(object, isBuilding = false, material) {
-  let data = object;
-  let blocksThree = convertGeneratedPointListToThreeVectorList(data, scale);
+  let blocksThree = convertGeneratedPointListToThreeVectorList(object, scale);
   readNearbyPoints(blocksThree, 300);
   let output = redrawGeneratedMeshes(blocksThree, isBuilding, material);
   return output;

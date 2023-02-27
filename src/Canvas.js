@@ -7,7 +7,7 @@ import { convertJSONToMeshes,convertJSONToPolyline } from "./renderer/loadGenera
 
 
 class Canvas extends Component {
-  componentDidMount() {
+  async componentDidMount() {
 
     //
     // road network generator
@@ -15,13 +15,14 @@ class Canvas extends Component {
     console.log("myGenerator", myGenerator);
     console.log("myGenerator.tensorField", myGenerator.tensorField);
     // running api.js
-    testAPI()
-    let jsonPackage = myGenerateAll()
+    // await testAPI()
+    let jsonPackage = await myGenerateAll()
     console.log("jsonPackage=", jsonPackage);
     // exportJsonDelayed();
     scene.add(convertJSONToMeshes(jsonPackage.blocks, true));
     scene.add(convertJSONToMeshes(jsonPackage.seaPolygon, false));
-
+    // scene.add(convertJSONToMeshes(jsonPackage.bigParks, false));
+    // scene.add(convertJSONToMeshes(jsonPackage.smallParks, false));
     scene.add(convertJSONToPolyline(jsonPackage.majorRoads,4))
     scene.add(convertJSONToPolyline(jsonPackage.mainRoads,4))
     //

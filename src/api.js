@@ -31,9 +31,9 @@ function exportToJsonFile(jsonData, filename) {
     linkElement.click();
 }
 
-export function myGenerateAll() {
+export async function myGenerateAll() {
     myGenerator.mySetFirstGenerateFalse();
-    const results =  myGenerator.myGenerate();
+    const results = await myGenerator.myGenerate();
     console.log("results=", results);
     const coastline = results.coastline;
     const seaPolygon = results.seaPolygon;
@@ -110,5 +110,6 @@ export function exportJsonDelayed() {
         console.log("myGenerateAll");
         let jsonPackage = myGenerateAll();
         exportToJsonFile([jsonPackage], "jsonPackage");
+
     }, 2000);
 }
