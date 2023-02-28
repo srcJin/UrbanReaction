@@ -90,12 +90,14 @@ function redrawGeneratedMeshes(blocksThree, isBuilding, material) {
   let sumwSize = 0;
   let avgwSize = 0;
   let group = new THREE.Group();
+  console.log("blocksThree", blocksThree)
+
   for (let i = 0; i < blocksThree.length; i++) {
     if (isBuilding) {
       // read weight
       sumwSize = 0;
       avgwSize = 0;
-      //console.log("clipperBuilding[j].nearbyPoints.length=",clipperBuilding[j].nearbyPoints.length)
+      // console.log("clipperBuilding[j].nearbyPoints.length=",blocksThree[i].nearbyPoints.length)
       // console.log("clipperBuilding[j].nearbyPoints[1].wSize",clipperBuilding[j].nearbyPoints[1].wSize)
       for (let j = 0; j < blocksThree[i].nearbyPoints.length; j++) {
         //console.log(`clipperBuilding[${i}].nearbyPoints[${j}].wSize=${clipperBuilding[i].nearbyPoints[j].wSize}`)

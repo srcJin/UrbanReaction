@@ -1,5 +1,5 @@
 import { myGenerator } from "./main";
-import Vector from "./ts/vector";
+import Vector from "./generator/vector";
 
 // make jsonPackage a global variable
 export let jsonPackage = {};

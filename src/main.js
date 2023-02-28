@@ -1,12 +1,12 @@
 import 'babel-polyfill';
 // import * as log from 'loglevel';
 import * as dat from 'dat.gui';
-import TensorFieldGUI from './ts/ui/tensor_field_gui';
-import MainGUI from './ts/ui/main_gui';
-import { DefaultCanvasWrapper } from './ts/ui/canvas_wrapper';
-import Util from './ts/util';
-import DragController from './ts/ui/drag_controller';
-import { DefaultStyle } from './ts/ui/style';
+import TensorFieldGUI from './generator/ui/tensor_field_gui';
+import MainGUI from './generator/ui/main_gui';
+import { DefaultCanvasWrapper } from './generator/ui/canvas_wrapper';
+import Util from './generator/util';
+import DragController from './generator/ui/drag_controller';
+import { DefaultStyle } from './generator/ui/style';
 import * as ColourSchemes from './colour_schemes.json';
 // import { saveAs } from 'file-saver';
 console.log("--------------------");

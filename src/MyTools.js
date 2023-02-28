@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { drawStar, drawCurve, drawCircle, drawBoundary,drawRectangle } from "./rendererApi";
 import { myAddGrid,myAddRadial,myReset } from "./generatorApi";
-import Vector from "./ts/vector";
+import Vector from "./generator/vector";
 import { randInt } from "three/src/math/MathUtils";
 import { Canvas } from "./Generator";
 import { myGenerateAll } from "./generatorApi";
