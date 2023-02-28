@@ -7,13 +7,10 @@ import ReactDOM from "react-dom/client";
 // the canvas is a child of the buttons
 
 import Title from './Title';
-import Buttons from './Buttons';
 import {Canvas} from './Generator';
 import './style.css';
 import Spacer from './Spacer';
-import {GenerateButton,RefreshButton} from './MyButtons';
 import {NumberInputs,ToolButtons} from './MyTools';
-
 
 
 const root1 = ReactDOM.createRoot(document.getElementById('root1'));
@@ -29,9 +26,5 @@ root1.render(<Title/>)
 root2.render(<ToolButtons />);
 root3.render(<Spacer />);
 root4.render(<Canvas />);
-root5.render(<GenerateButton />);
-root6.render(<RefreshButton />);
-// root7.render(<NumberInputs />);
-// root8.render(<ToolButtons />);
 
 

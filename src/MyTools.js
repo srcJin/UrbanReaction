@@ -5,6 +5,8 @@ import { myAddGrid,myAddRadial,myReset } from "./generatorApi";
 import Vector from "./ts/vector";
 import { randInt } from "three/src/math/MathUtils";
 import { Canvas } from "./Generator";
+import { myGenerateAll } from "./generatorApi";
+import { jsonPackage } from "./generatorApi";
 
 export class NumberInputs extends React.Component {
   constructor(props) {
@@ -112,6 +114,21 @@ export class ToolButtons extends React.Component {
     canvas.emptyScene()
   }
 
+  generate() {
+
+    myGenerateAll();
+
+  }
+
+  update3D() {
+    const canvas = new Canvas();
+    console.log("RefreshButton jsonPackage = ",jsonPackage);
+    canvas.refresh(jsonPackage);
+
+  } 
+
+
+
   render() {
     return (
       <div className="Tools">
@@ -122,10 +139,13 @@ export class ToolButtons extends React.Component {
         <button onClick={this.curve.bind(this)}>curve</button>
         <button onClick={this.circle.bind(this)}>circle</button>
         <button onClick={this.star.bind(this)}>star</button>
+        <br></br>
+        <br></br>
         <button onClick={this.resetField.bind(this)}>resetField</button>
         <button onClick={this.gridField.bind(this)}>gridField</button>
         <button onClick={this.radialField.bind(this)}>radialField</button>
-
+        <button onClick={this.generate.bind(this)}>Generate</button>
+        <button onClick={this.update3D.bind(this)}>Update3D</button>
       </div>
     );
   }
