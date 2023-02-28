@@ -1,8 +1,10 @@
 import React from "react";
 import * as THREE from "three";
-import { drawStar, drawCurve, drawCircle, drawBoundary } from "./rendererApi";
-
-
+import { drawStar, drawCurve, drawCircle, drawBoundary,drawRectangle } from "./rendererApi";
+import { myAddGrid,myAddRadial,myReset } from "./generatorApi";
+import Vector from "./ts/vector";
+import { randInt } from "three/src/math/MathUtils";
+import { Canvas } from "./Generator";
 
 export class NumberInputs extends React.Component {
   constructor(props) {
@@ -86,13 +88,28 @@ export class ToolButtons extends React.Component {
   }
 
   gridField() {
+    let positx = 300
+    let posity = 400
+
     console.log("Triggering gridField");
-    drawStar(200,200,100);
+    myAddGrid(new Vector(positx, posity), randInt(50,100), 1, 0.5);
+    // divide by scale (now is 4). offset by 2000, move to left corner
+    drawRectangle(positx-1200,posity-1200,200,200);
   }
 
   radialField() {
+    let positx = 200
+    let posity = 100
     console.log("Triggering radialField");
-    drawStar(200,200,100);
+    myAddRadial(new Vector(200, 100), randInt(50,100), 8);  
+    drawCircle(positx-1200,posity-1200,100);
+  }
+
+  resetField() {
+    console.log("Triggering resetField");
+    myReset()
+    const canvas = new Canvas();
+    canvas.emptyScene()
   }
 
   render() {
@@ -105,8 +122,9 @@ export class ToolButtons extends React.Component {
         <button onClick={this.curve.bind(this)}>curve</button>
         <button onClick={this.circle.bind(this)}>circle</button>
         <button onClick={this.star.bind(this)}>star</button>
-        <button onClick={this.star.bind(this)}>gridField</button>
-        <button onClick={this.star.bind(this)}>radialField</button>
+        <button onClick={this.resetField.bind(this)}>resetField</button>
+        <button onClick={this.gridField.bind(this)}>gridField</button>
+        <button onClick={this.radialField.bind(this)}>radialField</button>
 
       </div>
     );

@@ -104,7 +104,7 @@ export function getStar(
   const starGeometry = new THREE.ShapeGeometry(shapedef);
   let starMesh = new THREE.Mesh(starGeometry, material);
   starMesh.rotation.x = -Math.PI / 2;
-  starMesh.position.set(posX, 0, posZ);
+  starMesh.position.set(posX, 100, posZ);
   starMesh.scale.set(size, size, size);
   return starMesh;
 }
@@ -114,15 +114,29 @@ export function getCircle(
   posX,
   posZ,
   size,
-  material = new THREE.MeshBasicMaterial({ color: 0xaaaaff })
+  material
 ) {
   let circleGeometry = new THREE.CircleGeometry(1, 32);
   let circleMesh = new THREE.Mesh(circleGeometry, material);
   circleMesh.rotation.x = -Math.PI / 2;
-  circleMesh.position.set(posX, 0, posZ);
+  circleMesh.position.set(posX, 100, posZ);
   circleMesh.scale.set(size, size, size);
   return circleMesh;
 }
+
+export function getRectangle(
+    posX,
+    posZ,
+    width,
+    height,
+    material
+  ) {
+    let planeGeometry = new THREE.PlaneGeometry(width, height);
+    let planeMesh = new THREE.Mesh(planeGeometry, material);
+    planeMesh.rotation.x = -Math.PI / 2;
+    planeMesh.position.set(posX, 100, posZ);
+    return planeMesh;
+  }
 
 // Draw individual point
 export function getPoint(Vector3, material = pointMaterialRed) {

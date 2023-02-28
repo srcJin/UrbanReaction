@@ -26,12 +26,12 @@ const root7 = ReactDOM.createRoot(document.getElementById('root7'));
 const root8 = ReactDOM.createRoot(document.getElementById('root8'));
 
 root1.render(<Title/>)
-root2.render(<Buttons />);
+root2.render(<ToolButtons />);
 root3.render(<Spacer />);
 root4.render(<Canvas />);
 root5.render(<GenerateButton />);
 root6.render(<RefreshButton />);
 // root7.render(<NumberInputs />);
-root8.render(<ToolButtons />);
+// root8.render(<ToolButtons />);
 
 

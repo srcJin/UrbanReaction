@@ -21,6 +21,11 @@ export default class CanvasWrapper {
     setDimensions() {
         this._width = window.innerWidth * this._scale;
         this._height = window.innerHeight * this._scale;
+        console.log("this._width",this._width);
+        console.log("this._height",this._height);
+
+        // this._width = 2400;
+        // this._height = 2400;
     }
     get width() {
         return this._width;

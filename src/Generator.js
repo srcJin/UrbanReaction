@@ -12,6 +12,28 @@ export class Canvas extends React.Component {
     console.log("hello from canvas!")
   }
   
+
+  emptyScene() {
+    console.log("refreshing 3d")
+    // remove meshes from scene, keep lights
+    for (let i =  0; i <= scene.children.length-1; i++) {
+      // console.log(scene);
+      if(scene.children[i].type === ("Group" ||"Mesh" || "Line2" || "Points"|| "Points" )){
+          scene.remove(scene.children[i]);}
+
+      if(scene.children[i].type === ("Mesh")) {
+          scene.remove(scene.children[i]);
+        }
+  }
+
+    console.log("Canvas refresh jsonPackage = ", jsonPackage);
+    renderer.setSize(500, 500);
+    renderer.setPixelRatio(1);
+    console.log(scene);
+
+    animate();
+  }
+
   async refresh(jsonPackage) {
     console.log("refreshing 3d")
     // remove meshes from scene, keep lights

@@ -10,7 +10,8 @@ import {
   getLine,
   getWeightGrid,
   getGrids,
-  getPolyline
+  getPolyline,
+  getRectangle
 } from "./renderer/getGeometries.js";
 
 
@@ -25,11 +26,17 @@ export function drawCurve(controlPoints) {
   scene.add(getCurve(controlPoints));
 }
 
-export function drawCircle(x, y, size) {
-  console.log("star");
+export function drawCircle(x, y, size, material = new THREE.MeshBasicMaterial({ color: 0x800000 })) {
+  console.log("drawCircle");
   // draw Attractor Curves
-  scene.add(getCircle(x, y, size));
+  scene.add(getCircle(x, y, size, material));
 }
+
+export function drawRectangle(x, y, width, height, material= new THREE.MeshBasicMaterial({ color: 0x800000 })) {
+    console.log("drawRectangle");
+    // draw Attractor Curves
+    scene.add(getRectangle(x, y, width,height, material));
+  }
 
 export function drawBoundary(height, width) {
   console.log("star");
