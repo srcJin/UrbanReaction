@@ -4,9 +4,7 @@ import "./Buttons.css";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { TransformControls } from "three/addons/controls/TransformControls.js";
-import { Line2 } from "three/addons/lines/Line2.js";
-import { LineMaterial } from "three/addons/lines/LineMaterial.js";
-import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+
 import * as GeometryUtils from "three/addons/utils/GeometryUtils.js";
 import { weightGrid } from "./renderer/UrbanLayer.js";
 
@@ -18,6 +16,7 @@ import {
     getBoundary,
     getLine,
     getWeightGrid,
+    getGrids,
   } from "./renderer/getGeometries.js";
     
   const params = {
@@ -78,71 +77,7 @@ import {
     scene.add(getWeightGrid(weightGrid).newGridPoints);
     scene.add(getWeightGrid(weightGrid).newGrid);
 
-    let boundaryHeight = 1000;
-    let boundaryWidth = 800;
 
-    scene.add(getBoundary(boundaryHeight, boundaryWidth));
-
-    // draw Road grid, hardcoded
-    function drawRoads(boundaryHeight, boundaryWidth) {
-      let divisionX = 5;
-      let divisionZ = 4;
-      let intervalZ = boundaryHeight / divisionZ;
-      let intervalX = boundaryWidth / divisionX;
-
-      let gridMaterial = new LineMaterial({ color: 0xaaaaaa, linewidth: 5 });
-      gridMaterial.resolution.set(window.innerWidth, window.innerHeight);
-
-      let grid = new THREE.Group();
-      for (
-        let i = -boundaryWidth / 2 + intervalX;
-        i < boundaryWidth / 2;
-        i += intervalX
-      ) {
-        let line = new Line2(new LineGeometry(), gridMaterial);
-        line.geometry.setPositions([
-          i,
-          0,
-          -boundaryHeight / 2,
-          i,
-          0,
-          boundaryHeight / 2,
-        ]);
-        grid.add(line);
-      }
-
-      for (
-        let j = -boundaryHeight / 2 + intervalZ;
-        j < boundaryHeight / 2;
-        j += intervalZ
-      ) {
-        let line = new Line2(new LineGeometry(), gridMaterial);
-        line.geometry.setPositions([
-          -boundaryWidth / 2,
-          0,
-          j,
-          boundaryWidth / 2,
-          0,
-          j,
-        ]);
-        grid.add(line);
-      }
-      return grid;
-    }
-
-    scene.add(drawRoads(boundaryWidth, boundaryHeight));
-
-    // draw Attractor Curves
-    let controlPoints = [
-      new THREE.Vector3(-800, 0, 0),
-      new THREE.Vector3(-200, 0, 200),
-      new THREE.Vector3(200, 0, -200),
-      new THREE.Vector3(800, 0, 0),
-    ];
-    scene.add(getCurve(controlPoints));
-    // draw Attractors
-    scene.add(getStar(100, 200, 100));
-    scene.add(getCircle(-200, -200, 80));
 
     // clipper to get parcles
 

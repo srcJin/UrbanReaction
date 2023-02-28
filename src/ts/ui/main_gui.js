@@ -8,6 +8,7 @@ import PolygonFinder from '../impl/polygon_finder';
 import { DefaultStyle } from './style';
 import Buildings from './buildings';
 import PolygonUtil from '../impl/polygon_util';
+import { jsonPackage } from '../../generatorApi';
 console.log("--------------------");
 console.log("main_gui.ts is running");
 /**
@@ -214,6 +215,19 @@ export default class MainGUI {
         this.redraw = true;
         await this.buildings.generate(this.animate);
         console.log("generateEverything(),this=",this)
+
+        jsonPackage["coastline"] = [this.coastline.coastline]; // coastline here is only an array, so need to put inside an array to read normally
+        jsonPackage["seaPolygon"] = [this.coastline.seaPolygon]; // seaPolygon here is only an array, so need to put inside an array to read normally
+        jsonPackage["river"] = [this.coastline.river]; // river here is only an array, so need to put inside an array to read normally
+        jsonPackage["secondaryRiver"] = this.coastline.secondaryRiver;
+        jsonPackage["majorRoads"] = this.majorRoads.roads;
+        jsonPackage["mainRoads"] = this.mainRoads.roads;
+        jsonPackage["minorRoads"] = this.minorRoads.roads;
+        jsonPackage["bigParks"] = this.bigParks;
+        jsonPackage["smallParks"] = this.smallParks;
+        jsonPackage["intersections"] = this.intersections;
+        jsonPackage["blocks"] = await this.buildings.getBlocks();
+
         return {
             coastline: this.coastline.coastline,
             seaPolygon: this.coastline.seaPolygon,

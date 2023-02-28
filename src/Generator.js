@@ -1,11 +1,11 @@
 import React, { useRef } from "react";
 import "./Buttons.css";
-import { myGenerateAll } from "./api";
+import { myGenerateAll } from "./generatorApi";
 import { myGenerator } from "./main";
-import { renderer, animate, scene } from "./renderer";
+import { renderer, animate, scene } from "./Renderer";
 import { convertJSONToMeshes,convertJSONToPolyline } from "./renderer/loadGenerated.js";
 import { buildingMaterial, coastlineMaterial, greenMaterial, majorRoadMaterial, minorRoadMaterial, waterMaterial } from "./renderer/Materials.js"
-import { jsonPackage } from "./api";
+import { jsonPackage } from "./generatorApi";
 export class Canvas extends React.Component {
 
   hello() {
@@ -46,16 +46,20 @@ export class Canvas extends React.Component {
     console.log("myGenerator.tensorField", myGenerator.tensorField);
     // running api.js
     // await testAPI()
-    console.log("jsonPackage=", jsonPackage);
-    let generate = await myGenerateAll()
-    
-    // clear jsonPackage
 
+    // clear jsonPackage
+    for (const key in jsonPackage) {
+      jsonPackage[key] = [];
+    }
+
+    // refresh jsonPackage
+    // generate can only run right before jsonPackage, nothing can happen in between
+    let generate = await myGenerateAll()
     for (let key in jsonPackage) {
-      console.log("key=",key);
-      jsonPackage[key] = []
+      jsonPackage[key] = [];     // add this line to disable, disable for now for tweaking api
       jsonPackage[key] = generate[key]
     }
+
 
     // exportJsonDelayed();
     scene.add(convertJSONToMeshes(jsonPackage.blocks, true, buildingMaterial ));
@@ -68,7 +72,6 @@ export class Canvas extends React.Component {
     scene.add(convertJSONToPolyline(jsonPackage.minorRoads, minorRoadMaterial))
     scene.add(convertJSONToPolyline(jsonPackage.mainRoads, majorRoadMaterial))
     scene.add(convertJSONToPolyline(jsonPackage.coastline, coastlineMaterial)) 
-
 
     //
     // three js renderer

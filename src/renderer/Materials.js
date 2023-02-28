@@ -146,21 +146,21 @@ export const waterMaterial =
 
 
 export const majorRoadMaterial = new LineMaterial({
-  color: 0xec5f6b,
+  color: 0xffd166,
   linewidth: 5, // in pixels
   resolution: 1, // set the resolution of the derivative in pixels
   dashed: false,
 })
 
 export const mainRoadMaterial = new LineMaterial({
-  color: 0xffa366,
+  color: 0x118AB2,
   linewidth: 5, // in pixels
   resolution: 1, // set the resolution of the derivative in pixels
   dashed: false,
 })
 
 export const minorRoadMaterial = new LineMaterial({
-  color: 0xffd166,
+  color: 0xec5f6b,
   linewidth: 5, // in pixels
   resolution: 1, // set the resolution of the derivative in pixels
   dashed: false,

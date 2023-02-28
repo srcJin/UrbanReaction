@@ -1,10 +1,10 @@
 import React from "react";
 import { render } from "react-dom";
-import { myGenerateAll } from "./api";
+import { myGenerateAll } from "./generatorApi";
 
-import {Canvas} from "./Canvas";
-import { jsonPackage } from "./api";
-class LikeButton extends React.Component {
+import { Canvas } from "./Generator";
+import { jsonPackage } from "./generatorApi";
+export class GenerateButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = { message: "Generate new masterplan" };
@@ -24,7 +24,7 @@ class LikeButton extends React.Component {
   }
 }
 
-class RefreshButton extends React.Component {
+export class RefreshButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = { message: "Refresh 3D" };
@@ -35,12 +35,12 @@ class RefreshButton extends React.Component {
     const canvas = new Canvas();
     // Call the hello() function on the Canvas component
     canvas.hello();
-    let generate = await myGenerateAll();
-    // clear jsonPackage
-    for (let key in jsonPackage) {
-      console.log("key=", key);
-      jsonPackage[key] = generate[key];
-    }
+    // let generate = await myGenerateAll();
+    // // clear jsonPackage
+    // for (let key in jsonPackage) {
+    //   console.log("key=", key);
+    //   jsonPackage[key] = generate[key];
+    // }
 
     console.log("RefreshButton jsonPackage = ",jsonPackage);
     canvas.refresh(jsonPackage);
@@ -60,6 +60,3 @@ class RefreshButton extends React.Component {
     );
   }
 }
-
-export default LikeButton;
-export { RefreshButton };

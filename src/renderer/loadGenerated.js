@@ -40,6 +40,7 @@ function convertGeneratedPointListToThreeVectorList(list, scale = 1) {
     let newCurvePoints = [];
     for (let j = 0; j < list[i].length; j++) {
       newCurvePoints.push(
+        // here 2000 is an offset value
         new THREE.Vector3(
           list[i][j].x * scale - 2000,
           0,
@@ -70,7 +71,7 @@ export function convertJSONToPolyline(
   let group = new THREE.Group();
   for (let line of threeGeometry) {
     // console.log(line);
-    group.add(getPolyline(line, material));
+    group.add(getPolyline(line, false, material));
   }
   return group;
 }
