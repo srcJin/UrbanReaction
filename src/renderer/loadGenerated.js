@@ -78,10 +78,46 @@ export function convertJSONToPolyline(
 
 export function convertJSONToMeshes(object, isBuilding = false, material, scale = 4 ) {
   let blocksThree = convertGeneratedPointListToThreeVectorList(object, scale);
-  readNearbyPoints(blocksThree, 300);
-  let output = redrawGeneratedMeshes(blocksThree, isBuilding, material);
-  return output;
+  if (isBuilding){
+    readNearbyPoints(blocksThree, 300);
+    let output = redrawGeneratedBuildings(blocksThree, material)
+    return output;
+  } else {
+    let output = redrawGeneratedMeshes(blocksThree, isBuilding, material);
+    return output;
+  } 
 }
+
+function redrawGeneratedBuildings(blocksThree, material) {
+  //console.log("------------------------------------")
+  //console.log("redrawBuildings!!!!!!!!!!!!!")
+
+  let sumwSize = 0;
+  let avgwSize = 0;
+  let group = new THREE.Group();
+  console.log("redrawGeneratedBuildings blocksThree", blocksThree)
+
+  for (let i = 0; i < blocksThree.length; i++) {
+      // read weight
+      sumwSize = 0;
+      avgwSize = 0;
+      // console.log("clipperBuilding[j].nearbyPoints.length=",blocksThree[i].nearbyPoints.length)
+      // console.log("clipperBuilding[j].nearbyPoints[1].wSize",clipperBuilding[j].nearbyPoints[1].wSize)
+      for (let j = 0; j < blocksThree[i].nearbyPoints.length; j++) {
+        //console.log(`clipperBuilding[${i}].nearbyPoints[${j}].wSize=${clipperBuilding[i].nearbyPoints[j].wSize}`)
+        // sumwSize = sumwSize + blocksThree[i].nearbyPoints[j].wSize
+        sumwSize = 100;
+      }
+      // avgwSize=sumwSize/blocksThree[i].nearbyPoints.length
+      //console.log("redrawBuildings, avgwSize= ",avgwSize)
+      group.add(setMesh(blocksThree[i], 40, material));
+
+  }
+  // console.log("group=",group);
+  return group;
+}
+
+
 
 function redrawGeneratedMeshes(blocksThree, isBuilding, material) {
   //console.log("------------------------------------")
@@ -90,7 +126,6 @@ function redrawGeneratedMeshes(blocksThree, isBuilding, material) {
   let sumwSize = 0;
   let avgwSize = 0;
   let group = new THREE.Group();
-  console.log("blocksThree", blocksThree)
 
   for (let i = 0; i < blocksThree.length; i++) {
     if (isBuilding) {

@@ -42,26 +42,27 @@ var pList = [
 ];
 
 // get mid points
-export function readNearbyPoints(clipperGrid, threshold) {
-  //console.log("findCenterPoint clipperGrid=",clipperGrid)
-
+export function readNearbyPoints(buildingPointLists, threshold) {
+  //console.log("findCenterPoint buildingPointLists=",buildingPointLists)
+  
+  // get center points of building
   let centerPoint;
 
-  for (let i = 0; i < clipperGrid.length; i++) {
+  for (let i = 0; i < buildingPointLists.length; i++) {
     let sumX = 0;
     let sumZ = 0;
-    for (let j = 0; j < clipperGrid[i].length; j++) {
-      sumX = sumX + clipperGrid[i][j].x;
-      sumZ = sumZ + clipperGrid[i][j].z;
+    for (let j = 0; j < buildingPointLists[i].length; j++) {
+      sumX = sumX + buildingPointLists[i][j].x;
+      sumZ = sumZ + buildingPointLists[i][j].z;
     }
-    let avgX = sumX / clipperGrid[i].length;
-    let avgZ = sumZ / clipperGrid[i].length;
+    let avgX = sumX / buildingPointLists[i].length;
+    let avgZ = sumZ / buildingPointLists[i].length;
     centerPoint = new THREE.Vector3(avgX, 0, avgZ);
     // console.log("centerPoint=",centerPoint)
     getPoint(centerPoint, pointMaterialRed);
     // add this parameter to objects
-    clipperGrid[i].centerPoint = centerPoint;
-    clipperGrid[i].nearbyPoints = [];
+    buildingPointLists[i].centerPoint = centerPoint;
+    buildingPointLists[i].nearbyPoints = [];
 
     // read nearby points
     for (let k = 0; k < weightGrid.points.length; k++) {
@@ -76,7 +77,7 @@ export function readNearbyPoints(clipperGrid, threshold) {
       );
       if (distance < threshold) {
         //nearby.push(Grid.points[i])
-        clipperGrid[i].nearbyPoints.push(weightGrid.points[i]);
+        buildingPointLists[i].nearbyPoints.push(weightGrid.points[i]);
       }
     }
 
@@ -108,21 +109,21 @@ export function readNearbyPoints(clipperGrid, threshold) {
 //   return meshGroup
 // }
 
-// export function clearNearbyPoints(clipperGrid) {
-//   for (let i = 0; i < clipperGrid.length; i++) {
-//     clipperGrid[i].nearbyPoints = [];
+// export function clearNearbyPoints(buildingPointLists) {
+//   for (let i = 0; i < buildingPointLists.length; i++) {
+//     buildingPointLists[i].nearbyPoints = [];
 //   }
 // }
 
 // export function redrawContext() {
-//   // draw clipperGrid
-//   let clipperGrid = clipper.split_polygon(pList, pLines, 1); // it has a limit of 2, can't be 0, will look later
-//   //console.log("clipper.split_polygon(pList,ptl)=",clipperGrid)
+//   // draw buildingPointLists
+//   let buildingPointLists = clipper.split_polygon(pList, pLines, 1); // it has a limit of 2, can't be 0, will look later
+//   //console.log("clipper.split_polygon(pList,ptl)=",buildingPointLists)
 //   meshGroup = new THREE.Group()
 
-//   for (let i = 0; i < clipperGrid.length; i++) {
+//   for (let i = 0; i < buildingPointLists.length; i++) {
 //     meshGroup.add(setMesh(
-//       clipperGrid[i],
+//       buildingPointLists[i],
 //       1,
 //       new THREE.MeshPhongMaterial({
 //         color: 0x636363,
