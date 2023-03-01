@@ -1,18 +1,18 @@
 import React, { useRef } from "react";
 import "./Buttons.css";
-import { myGenerateAll } from "./generatorApi";
+import { myGenerateAll, jsonPackage } from "./generatorApi";
 import { myGenerator } from "./main";
 import { renderer, animate, scene } from "./Renderer";
 import { convertJSONToMeshes,convertJSONToPolyline } from "./renderer/loadGenerated.js";
 import { buildingMaterial, coastlineMaterial, greenMaterial, majorRoadMaterial, minorRoadMaterial, waterMaterial } from "./renderer/Materials.js"
-import { jsonPackage } from "./generatorApi";
+import { weightGrid } from "./renderer/UrbanLayer";
+import { drawWeightGrid } from "./rendererApi";
 export class Canvas extends React.Component {
 
   hello() {
     console.log("hello from canvas!")
   }
   
-
   emptyScene() {
     console.log("refreshing 3d")
     // remove meshes from scene, keep lights
@@ -53,7 +53,7 @@ export class Canvas extends React.Component {
     scene.add(convertJSONToPolyline(jsonPackage.minorRoads, minorRoadMaterial))
     scene.add(convertJSONToPolyline(jsonPackage.mainRoads, majorRoadMaterial))
     scene.add(convertJSONToPolyline(jsonPackage.coastline, coastlineMaterial)) 
-
+    drawWeightGrid(weightGrid)
     renderer.setSize(500, 500);
     renderer.setPixelRatio(1);
     animate();

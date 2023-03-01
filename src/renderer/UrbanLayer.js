@@ -2,16 +2,17 @@
 
 import * as THREE from "three";
 import { pointMaterialRed } from "./Materials.js";
-import { getPoint,getGrid } from "./getGeometries.js";
+import { getPoint, getGrid } from "./getGeometries.js";
 import { getDistance } from "./myMath.js";
+import { scene } from "../Renderer";
 
 // draw outer grid
-let a = new THREE.Vector3(1500, 0, 1500);
-let b = new THREE.Vector3(-1500, 0, 1500);
-let c = new THREE.Vector3(-1500, 0, -1500);
-let d = new THREE.Vector3(1500, 0, -1500);
+let a = new THREE.Vector3(3000, 0, 3000);
+let b = new THREE.Vector3(-3000, 0, 3000);
+let c = new THREE.Vector3(-3000, 0, -3000);
+let d = new THREE.Vector3(3000, 0, -3000);
 let weightGridBoundary = [a, b, c, d];
-export let weightGrid = getGrid(100, 100, weightGridBoundary);
+export let weightGrid = getGrid(150, 150, weightGridBoundary);
 
 console.log("weightGrid=", weightGrid);
 
@@ -33,7 +34,6 @@ console.log("weightGrid=", weightGrid);
 //   }
 // }
 
-
 var pList = [
   new THREE.Vector3(-1000, 0, -800),
   new THREE.Vector3(-900, 0, 700),
@@ -42,29 +42,36 @@ var pList = [
 ];
 
 // get mid points
-export function readNearbyPoints(buildingPointLists, threshold) {
-  //console.log("findCenterPoint buildingPointLists=",buildingPointLists)
-  
+export function readNearbyPoints(blockPointLists, threshold) {
+  //console.log("findCenterPoint blockPointLists=",blockPointLists)
+
   // get center points of building
   let centerPoint;
-
-  for (let i = 0; i < buildingPointLists.length; i++) {
+  // for each building in the list
+  for (let i = 0; i < blockPointLists.length; i++) {
     let sumX = 0;
     let sumZ = 0;
-    for (let j = 0; j < buildingPointLists[i].length; j++) {
-      sumX = sumX + buildingPointLists[i][j].x;
-      sumZ = sumZ + buildingPointLists[i][j].z;
+    // for each point in a building, calculate average X and Z coordination
+    for (let j = 0; j < blockPointLists[i].length; j++) {
+      sumX = sumX + blockPointLists[i][j].x;
+      sumZ = sumZ + blockPointLists[i][j].z;
     }
-    let avgX = sumX / buildingPointLists[i].length;
-    let avgZ = sumZ / buildingPointLists[i].length;
+    let avgX = sumX / blockPointLists[i].length;
+    let avgZ = sumZ / blockPointLists[i].length;
     centerPoint = new THREE.Vector3(avgX, 0, avgZ);
     // console.log("centerPoint=",centerPoint)
-    getPoint(centerPoint, pointMaterialRed);
+    scene.add(getPoint(centerPoint, pointMaterialRed));
     // add this parameter to objects
-    buildingPointLists[i].centerPoint = centerPoint;
-    buildingPointLists[i].nearbyPoints = [];
+    blockPointLists[i].centerPoint = centerPoint;
+    blockPointLists[i].nearbyPoints = [];
+  }
 
-    // read nearby points
+  // now we have a grid made by central points of each
+  // now get the nearbypoints for each block
+  // initiate the nearbyPoints
+
+  // read nearby points
+  for (let i = 0; i < blockPointLists.length; i++) {
     for (let k = 0; k < weightGrid.points.length; k++) {
       let gridPtX = weightGrid.points[k].point.x;
       let gridPtZ = weightGrid.points[k].point.z;
@@ -75,14 +82,15 @@ export function readNearbyPoints(buildingPointLists, threshold) {
         centerPoint.x,
         centerPoint.z
       );
-      if (distance < threshold) {
+      if (distance <= threshold) {
         //nearby.push(Grid.points[i])
-        buildingPointLists[i].nearbyPoints.push(weightGrid.points[i]);
+        blockPointLists[i].nearbyPoints.push(weightGrid.points[i]);
       }
     }
 
     //console.log("centerPoint=",centerPoint)
   }
+  console.log("blockPointLists=", blockPointLists);
 }
 // scan through the points and get nearby ones
 
@@ -109,21 +117,21 @@ export function readNearbyPoints(buildingPointLists, threshold) {
 //   return meshGroup
 // }
 
-// export function clearNearbyPoints(buildingPointLists) {
-//   for (let i = 0; i < buildingPointLists.length; i++) {
-//     buildingPointLists[i].nearbyPoints = [];
+// export function clearNearbyPoints(blockPointLists) {
+//   for (let i = 0; i < blockPointLists.length; i++) {
+//     blockPointLists[i].nearbyPoints = [];
 //   }
 // }
 
 // export function redrawContext() {
-//   // draw buildingPointLists
-//   let buildingPointLists = clipper.split_polygon(pList, pLines, 1); // it has a limit of 2, can't be 0, will look later
-//   //console.log("clipper.split_polygon(pList,ptl)=",buildingPointLists)
+//   // draw blockPointLists
+//   let blockPointLists = clipper.split_polygon(pList, pLines, 1); // it has a limit of 2, can't be 0, will look later
+//   //console.log("clipper.split_polygon(pList,ptl)=",blockPointLists)
 //   meshGroup = new THREE.Group()
 
-//   for (let i = 0; i < buildingPointLists.length; i++) {
+//   for (let i = 0; i < blockPointLists.length; i++) {
 //     meshGroup.add(setMesh(
-//       buildingPointLists[i],
+//       blockPointLists[i],
 //       1,
 //       new THREE.MeshPhongMaterial({
 //         color: 0x636363,

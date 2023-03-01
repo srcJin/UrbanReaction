@@ -430,7 +430,6 @@ export function getGrids(boundaryHeight, boundaryWidth) {
   let divisionZ = 4;
   let intervalZ = boundaryHeight / divisionZ;
   let intervalX = boundaryWidth / divisionX;
-
   let gridMaterial = new LineMaterial({ color: 0xaaaaaa, linewidth: 5 });
   gridMaterial.resolution.set(window.innerWidth, window.innerHeight);
 

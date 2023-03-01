@@ -73,11 +73,6 @@ import {
     helper.material.transparent = true;
     scene.add(helper);
 
-    // draw weight Grid
-    scene.add(getWeightGrid(weightGrid).newGridPoints);
-    scene.add(getWeightGrid(weightGrid).newGrid);
-
-
 
     // clipper to get parcles
 
