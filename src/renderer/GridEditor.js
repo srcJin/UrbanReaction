@@ -6,7 +6,8 @@ import { scene } from "../Renderer";
 import { Line2 } from "three/examples/jsm/lines/Line2.js";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 import { LineGeometry } from "three/examples/jsm/lines/LineGeometry";
-
+import { getLineLength,evaluateCrv,checkLineIntersection } from "./myMath.js";
+import { getLine } from "./getGeometries.js";
 // grid parameters
 
 // draw outer grid
@@ -20,51 +21,74 @@ export let weightGrid = getGrid(150, 150, weightGridBoundary);
 
 console.log("weightGrid=", weightGrid);
 
+// modified getGrid
+export function getGrid(xoff, yoff, polygon) {
+  console.log("get grid");
+  var grid = [];
+  var lineX = [];
+  var lineZ = [];
+  // step one, set points, note this only works for 4 sided polygon
+  var a = polygon[0];
+  var b = polygon[1];
+  var c = polygon[2];
+  var d = polygon[3];
+  console.log("getGrid, polygon=", polygon);
+  // step two, calculate length of curve to determine number of divisions
+  var ab_length = getLineLength(a.x, a.z, b.x, b.z);
+  var cd_length = getLineLength(c.x, c.z, d.x, d.z);
+  var ab_ac_avg = (ab_length + cd_length) / 2;
+  var div1 = (ab_ac_avg - (ab_ac_avg % xoff)) / xoff;
 
-// draw Road grid, hardcoded
-export function getGrid(boundaryHeight, boundaryWidth) {
-  let divisionX = 5;
-  let divisionZ = 4;
-  let intervalZ = boundaryHeight / divisionZ;
-  let intervalX = boundaryWidth / divisionX;
-  let gridMaterial = new LineMaterial({ color: 0xaaaaaa, linewidth: 5 });
-  gridMaterial.resolution.set(window.innerWidth, window.innerHeight);
+  var bc_length = getLineLength(c.x, c.z, b.x, b.z);
+  var da_length = getLineLength(a.x, a.z, d.x, d.z);
+  var da_bc_avg = (da_length + bc_length) / 2;
+  var div2 = (da_bc_avg - (da_bc_avg % xoff)) / xoff;
 
-  let grid = new THREE.Group();
-  for (
-    let i = -boundaryWidth / 2 + intervalX;
-    i < boundaryWidth / 2;
-    i += intervalX
-  ) {
-    let line = new Line2(new LineGeometry(), gridMaterial);
-    line.geometry.setPositions([
-      i,
-      0,
-      -boundaryHeight / 2,
-      i,
-      0,
-      boundaryHeight / 2,
-    ]);
-    grid.add(line);
+  // step three,
+  for (var i = 1; i < div1; i++) {
+    // i and j are parameters along curve
+    for (var j = 1; j < div2; j++) {
+      // i and j are parameters along curve
+      // x axis
+      var ab = evaluateCrv(b, a, i / div1);
+      var cd = evaluateCrv(c, d, i / div1);
+
+      // y axis // seems to be working
+      var cb = evaluateCrv(b, c, j / div2);
+      var da = evaluateCrv(a, d, j / div2);
+      let material = new LineMaterial({
+        color: 0xaaaaaa,
+        linewidth: 1,
+      });
+      lineX.push(getLine(ab, cd, material));
+      lineZ.push(getLine(cb, da, material));
+
+      // calculate intersection
+      var pt = checkLineIntersection(
+        ab.x,
+        ab.z,
+        cd.x,
+        cd.z,
+        cb.x,
+        cb.z,
+        da.x,
+        da.z
+      );
+
+      // console.log(point)
+      if (pt) {
+        var ptObj = {
+          point: new THREE.Vector3(pt.x, 0, pt.y),
+          wHeight: 1,
+          wSize: 1,
+          wProgram: 1,
+        };
+      }
+      grid.push(ptObj);
+    }
   }
-
-  for (
-    let j = -boundaryHeight / 2 + intervalZ;
-    j < boundaryHeight / 2;
-    j += intervalZ
-  ) {
-    let line = new Line2(new LineGeometry(), gridMaterial);
-    line.geometry.setPositions([
-      -boundaryWidth / 2,
-      0,
-      j,
-      boundaryWidth / 2,
-      0,
-      j,
-    ]);
-    grid.add(line);
-  }
-  return grid;
+  console.log("getGrid return=",{ points: grid, lineX: lineX, lineZ: lineZ });
+  return { points: grid, lineX: lineX, lineZ: lineZ };
 }
 
 export function getWeightGridObj (weightGrid, pointMaterial = pointMaterialRed) {

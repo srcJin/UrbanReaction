@@ -51,8 +51,25 @@ export function drawBoundary(height, width) {
   scene.add(getPolyline(pointList, true));
 }
 
-export function drawWeightGrid(weightGridObj) {
+export function drawWeightGrid(weightGrid) {
   // draw weight Grid
-  scene.add(weightGridObj.newGridPoints);
-  scene.add(weightGridObj.newGrid);
+
+  const newGrid = new THREE.Group();
+  const newGridPoints = new THREE.Group();
+
+  for (let i = 0; i < weightGrid.lineX.length; i++) {
+    // scene.add(Grid.lineX[i])
+    newGrid.add(weightGrid.lineX[i]);
+  }
+  for (let j = 0; j < weightGrid.lineZ.length; j++) {
+    // scene.add(Grid.lineZ[j])
+    newGrid.add(weightGrid.lineZ[j]);
+  }
+  for (let k = 0; k < weightGrid.points.length; k++) {
+    newGridPoints.add(getPoint(weightGrid.points[k].point));
+  }
+
+  scene.add(newGrid);
+  scene.add(newGridPoints);
+
 }

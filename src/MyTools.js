@@ -7,6 +7,8 @@ import { randInt } from "three/src/math/MathUtils";
 import { Canvas } from "./Generator";
 import { myGenerateAll } from "./generatorApi";
 import { jsonPackage } from "./generatorApi";
+import { weightGrid } from "./renderer/GridEditor";
+import { drawWeightGrid } from "./rendererApi";
 
 export class NumberInputs extends React.Component {
   constructor(props) {
@@ -126,6 +128,19 @@ export class ToolButtons extends React.Component {
     canvas.refresh(jsonPackage);
   } 
 
+  initGrid() {
+    console.log("initGrid");
+    console.log('initGrid weightGrid=', weightGrid);
+    drawWeightGrid(weightGrid)
+    // @todo
+  } 
+
+  updateGrid() {
+    const canvas = new Canvas();
+    console.log("updateGrid");
+    // @todo
+  } 
+  
 
   render() {
     return (
@@ -144,6 +159,10 @@ export class ToolButtons extends React.Component {
         <button onClick={this.radialField.bind(this)}>radialField</button>
         <button onClick={this.generate.bind(this)}>Generate</button>
         <button onClick={this.update3D.bind(this)}>Update3D</button>
+        <br></br>
+        <br></br>
+        <button onClick={this.initGrid.bind(this)}>initGrid</button>
+        <button onClick={this.updateGrid.bind(this)}>updateGrid</button>
       </div>
     );
   }

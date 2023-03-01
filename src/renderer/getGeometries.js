@@ -217,75 +217,7 @@ export function getShape(cell) {
   }
 }
 
-// modified getGrid
-export function getGrid(xoff, yoff, polygon) {
-  console.log("get grid");
-  var grid = [];
-  var lineX = [];
-  var lineZ = [];
-  // step one, set points, note this only works for 4 sided polygon
-  var a = polygon[0];
-  var b = polygon[1];
-  var c = polygon[2];
-  var d = polygon[3];
-  console.log("getGrid, polygon=", polygon);
-  // step two, calculate length of curve to determine number of divisions
-  var ab_length = getLineLength(a.x, a.z, b.x, b.z);
-  var cd_length = getLineLength(c.x, c.z, d.x, d.z);
-  var ab_ac_avg = (ab_length + cd_length) / 2;
-  var div1 = (ab_ac_avg - (ab_ac_avg % xoff)) / xoff;
 
-  var bc_length = getLineLength(c.x, c.z, b.x, b.z);
-  var da_length = getLineLength(a.x, a.z, d.x, d.z);
-  var da_bc_avg = (da_length + bc_length) / 2;
-  var div2 = (da_bc_avg - (da_bc_avg % xoff)) / xoff;
-
-  // step three,
-  for (var i = 1; i < div1; i++) {
-    // i and j are parameters along curve
-    for (var j = 1; j < div2; j++) {
-      // i and j are parameters along curve
-      // x axis
-      var ab = evaluateCrv(b, a, i / div1);
-      var cd = evaluateCrv(c, d, i / div1);
-
-      // y axis // seems to be working
-      var cb = evaluateCrv(b, c, j / div2);
-      var da = evaluateCrv(a, d, j / div2);
-      let material = new LineMaterial({
-        color: 0xaaaaaa,
-        linewidth: 1,
-      });
-      lineX.push(getLine(ab, cd, material));
-      lineZ.push(getLine(cb, da, material));
-
-      // calculate intersection
-      var pt = checkLineIntersection(
-        ab.x,
-        ab.z,
-        cd.x,
-        cd.z,
-        cb.x,
-        cb.z,
-        da.x,
-        da.z
-      );
-
-      // console.log(point)
-      if (pt) {
-        var ptObj = {
-          point: new THREE.Vector3(pt.x, 0, pt.y),
-          wHeight: 1,
-          wSize: 1,
-          wProgram: 1,
-        };
-      }
-      grid.push(ptObj);
-    }
-  }
-
-  return { points: grid, lineX: lineX, lineZ: lineZ };
-}
 // disable rectangle boundary for now
 // export function getBoundary(boundaryWidth, boundaryHeight) {
 //     // draw Boundary
