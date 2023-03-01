@@ -124,9 +124,7 @@ export class ToolButtons extends React.Component {
     const canvas = new Canvas();
     console.log("RefreshButton jsonPackage = ",jsonPackage);
     canvas.refresh(jsonPackage);
-    
   } 
-
 
 
   render() {

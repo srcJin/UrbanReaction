@@ -4,7 +4,7 @@ import { Line2 } from "three/examples/jsm/lines/Line2.js";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 import { LineGeometry } from "three/examples/jsm/lines/LineGeometry.js";
 import axios from "axios";
-import { readNearbyPoints } from "./UrbanLayer.js";
+import { readNearbyPoints } from "./GridEditor";
 import { setMesh, getPolyline } from "./getGeometries";
 // import blocks from "./blocks.json";
 
@@ -79,7 +79,7 @@ export function convertJSONToPolyline(
 export function convertJSONToMeshes(object, isBuilding = false, material, scale = 4 ) {
   let blocksThree = convertGeneratedPointListToThreeVectorList(object, scale);
   if (isBuilding){
-    readNearbyPoints(blocksThree, 300);
+    // readNearbyPoints(blocksThree, 300);
     let output = redrawGeneratedBuildings(blocksThree, material)
     return output;
   } else {
@@ -103,11 +103,15 @@ function redrawGeneratedBuildings(blocksThree, material) {
       avgwSize = 0;
       // console.log("clipperBuilding[j].nearbyPoints.length=",blocksThree[i].nearbyPoints.length)
       // console.log("clipperBuilding[j].nearbyPoints[1].wSize",clipperBuilding[j].nearbyPoints[1].wSize)
-      for (let j = 0; j < blocksThree[i].nearbyPoints.length; j++) {
-        //console.log(`clipperBuilding[${i}].nearbyPoints[${j}].wSize=${clipperBuilding[i].nearbyPoints[j].wSize}`)
-        // sumwSize = sumwSize + blocksThree[i].nearbyPoints[j].wSize
-        sumwSize = 100;
-      }
+      
+      // @todo redraw buildings load nearbyPoints
+
+      // for (let j = 0; j < blocksThree[i].nearbyPoints.length; j++) {
+      //   //console.log(`clipperBuilding[${i}].nearbyPoints[${j}].wSize=${clipperBuilding[i].nearbyPoints[j].wSize}`)
+      //   // sumwSize = sumwSize + blocksThree[i].nearbyPoints[j].wSize
+      //   sumwSize = 100;
+      // }
+
       // avgwSize=sumwSize/blocksThree[i].nearbyPoints.length
       //console.log("redrawBuildings, avgwSize= ",avgwSize)
       group.add(setMesh(blocksThree[i], 40, material));

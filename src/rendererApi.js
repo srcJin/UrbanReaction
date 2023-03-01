@@ -9,7 +9,7 @@ import {
   getBoundary,
   getLine,
   getWeightGrid,
-  getGrids,
+  getGrid,
   getPolyline,
   getRectangle
 } from "./renderer/getGeometries.js";
@@ -51,8 +51,8 @@ export function drawBoundary(height, width) {
   scene.add(getPolyline(pointList, true));
 }
 
-export function drawWeightGrid(weightGrid) {
-    // draw weight Grid
-    scene.add(getWeightGrid(weightGrid).newGridPoints);
-    scene.add(getWeightGrid(weightGrid).newGrid);
+export function drawWeightGrid(weightGridObj) {
+  // draw weight Grid
+  scene.add(weightGridObj.newGridPoints);
+  scene.add(weightGridObj.newGrid);
 }

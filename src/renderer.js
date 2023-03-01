@@ -6,7 +6,6 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { TransformControls } from "three/addons/controls/TransformControls.js";
 
 import * as GeometryUtils from "three/addons/utils/GeometryUtils.js";
-import { weightGrid } from "./renderer/UrbanLayer.js";
 
 import {
     getCurve,
@@ -16,7 +15,7 @@ import {
     getBoundary,
     getLine,
     getWeightGrid,
-    getGrids,
+    getGrid,
   } from "./renderer/getGeometries.js";
     
   const params = {
