@@ -14,22 +14,32 @@ import {
   getRectangle
 } from "./renderer/getGeometries.js";
 
+import { weightGrid } from "./renderer/GridEditor";
+import { curveChangeGrid, shapeChangeGrid } from "./renderer/GridEditor";
 
 export function drawStar(x, y, size) {
   console.log("star");
-  scene.add(getStar(x, y, size));
+  let star = getStar(x, y, size)
+  scene.add(star);
+  shapeChangeGrid(weightGrid,star)
 }
 
 export function drawCurve(controlPoints) {
   console.log("star");
   // draw Attractor Curves
-  scene.add(getCurve(controlPoints));
+  let curveObj = getCurve(controlPoints)
+  let curve = curveObj.line2
+  // change the weightGrid from curve
+  curveChangeGrid(weightGrid, curveObj.points,300)
+  scene.add(curve);
 }
 
 export function drawCircle(x, y, size, material = new THREE.MeshBasicMaterial({ color: 0x800000 })) {
   console.log("drawCircle");
   // draw Attractor Curves
-  scene.add(getCircle(x, y, size, material));
+  let circle = getCircle(x, y, size, material)
+  scene.add(circle);
+  shapeChangeGrid(weightGrid, circle, size*2)
 }
 
 export function drawRectangle(x, y, width, height, material= new THREE.MeshBasicMaterial({ color: 0x800000 })) {
@@ -53,10 +63,9 @@ export function drawBoundary(height, width) {
 
 export function drawWeightGrid(weightGrid) {
   // draw weight Grid
-
+  // process the input array into three object groups
   const newGrid = new THREE.Group();
   const newGridPoints = new THREE.Group();
-
   for (let i = 0; i < weightGrid.lineX.length; i++) {
     // scene.add(Grid.lineX[i])
     newGrid.add(weightGrid.lineX[i]);
@@ -66,7 +75,8 @@ export function drawWeightGrid(weightGrid) {
     newGrid.add(weightGrid.lineZ[j]);
   }
   for (let k = 0; k < weightGrid.points.length; k++) {
-    newGridPoints.add(getPoint(weightGrid.points[k].point));
+    console.log("weightGrid.points[k].wSize=",weightGrid.points[k].wSize);
+    newGridPoints.add(getPoint(weightGrid.points[k].point, weightGrid.points[k].wSize, weightGrid.points[k].wProgram));
   }
 
   scene.add(newGrid);

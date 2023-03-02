@@ -16,6 +16,8 @@ export function getCurve(controlPoints) {
 
   // Position and THREE.Color Data
   const positions = [];
+  const points = [];
+
   const spline = new THREE.CatmullRomCurve3(controlPoints);
   const divisions = Math.round(12 * controlPoints.length);
   const point = new THREE.Vector3();
@@ -24,6 +26,7 @@ export function getCurve(controlPoints) {
     const t = i / l;
     spline.getPoint(t, point);
     positions.push(point.x, point.y, point.z);
+    points.push(new THREE.Vector3(point.x, point.y, point.z))
   }
 
   // Line2 ( LineGeometry, LineMaterial )
@@ -33,8 +36,8 @@ export function getCurve(controlPoints) {
   let curve = new Line2(curveGeometry, curveMaterial);
   // curve.computeLineDistances();
   curve.scale.set(1, 1, 1);
-
-  return curve;
+  // console.log("spline=",spline);
+  return {line2:curve, points:points};
 }
 
 export function getPolyline(
@@ -139,14 +142,22 @@ export function getRectangle(
   }
 
 // Draw individual point
-export function getPoint(Vector3, material = pointMaterialRed) {
+export function getPoint(Vector3, wSize, wProgram ) {
   // console.log("getPoint");
-  var geometry = new THREE.BufferGeometry(); //Declare a Geometry object
+  let geometry = new THREE.BufferGeometry(); //Declare a Geometry object
   const vertices = new Float32Array([Vector3.x, Vector3.y, Vector3.z]);
   geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
   // console.log("vertices=",vertices);
-  //Spawn point model
-  var point = new THREE.Points(geometry, material);
+  // Spawn point model
+  let material =  new THREE.PointsMaterial({
+    color: 0xE42251,    //Set the color, default 0xFFFFFF
+    vertexColors: false, //Define whether the material uses vertex color, the default is false ---If this option is set to true, the color attribute is invalid
+    size: wSize*100,          //Define the size of the particles. The default is 1.0
+    transparent: true,
+    opacity: 1
+  });
+
+  let point = new THREE.Points(geometry, material);
   // console.log("point=",point);
   //Add the model to the scene
   return point;

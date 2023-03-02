@@ -7,9 +7,10 @@ import { randInt } from "three/src/math/MathUtils";
 import { Canvas } from "./Generator";
 import { myGenerateAll } from "./generatorApi";
 import { jsonPackage } from "./generatorApi";
-import { weightGrid } from "./renderer/GridEditor";
+import { weightGrid, refreshGrid } from "./renderer/GridEditor";
 import { drawWeightGrid } from "./rendererApi";
-
+import {curveChangeGrid} from "./renderer/GridEditor"
+import { getGrid, weightGridBoundary } from "./renderer/GridEditor";
 export class NumberInputs extends React.Component {
   constructor(props) {
     super(props);
@@ -71,10 +72,10 @@ export class ToolButtons extends React.Component {
   
   curve() {
     let controlPoints = [
-        new THREE.Vector3(-800, 0, 0),
-        new THREE.Vector3(-200, 0, 200),
-        new THREE.Vector3(200, 0, -200),
-        new THREE.Vector3(800, 0, 0),
+        new THREE.Vector3(-3200, 0, 0),
+        new THREE.Vector3(-1200, 0, 1200),
+        new THREE.Vector3(1200, 0, -1200),
+        new THREE.Vector3(3200, 0, 0),
       ];
 
     drawCurve(controlPoints)
@@ -126,18 +127,35 @@ export class ToolButtons extends React.Component {
     const canvas = new Canvas();
     console.log("RefreshButton jsonPackage = ",jsonPackage);
     canvas.refresh(jsonPackage);
+    drawWeightGrid(weightGrid)
+
   } 
 
   initGrid() {
     console.log("initGrid");
     console.log('initGrid weightGrid=', weightGrid);
+    // generate a new weightGrid
+    weightGrid.points = []
+    weightGrid.lineX = []
+    weightGrid.lineZ = []
+    let newGrid = getGrid(150, 150, weightGridBoundary)
+    console.log("newGrid=",newGrid);
+    weightGrid.points = newGrid.points
+    weightGrid.lineX = newGrid.lineX
+    weightGrid.lineZ = newGrid.lineZ
     drawWeightGrid(weightGrid)
+    console.log("weightGrid2=",weightGrid);
     // @todo
   } 
 
-  updateGrid() {
+  refreshGrid() {
+    console.log("refreshGrid");
+
     const canvas = new Canvas();
-    console.log("updateGrid");
+    canvas.emptyScene()
+
+    drawWeightGrid(weightGrid)
+
     // @todo
   } 
   
@@ -162,7 +180,7 @@ export class ToolButtons extends React.Component {
         <br></br>
         <br></br>
         <button onClick={this.initGrid.bind(this)}>initGrid</button>
-        <button onClick={this.updateGrid.bind(this)}>updateGrid</button>
+        <button onClick={this.refreshGrid.bind(this)}>refreshGrid</button>
       </div>
     );
   }
