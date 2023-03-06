@@ -17,13 +17,6 @@ import {
 import { weightGrid } from "./renderer/GridEditor";
 import { curveChangeGrid, shapeChangeGrid } from "./renderer/GridEditor";
 
-export function drawStar(x, y, size) {
-  console.log("star");
-  let star = getStar(x, y, size)
-  scene.add(star);
-  shapeChangeGrid(weightGrid,star)
-}
-
 export function drawCurve(controlPoints) {
   console.log("star");
   // draw Attractor Curves
@@ -34,18 +27,32 @@ export function drawCurve(controlPoints) {
   scene.add(curve);
 }
 
+export function drawStar(x, y, size) {
+  console.log("star");
+  let shape = getStar(x, y, size)
+  scene.add(shape);
+  let type = "star"
+  shapeChangeGrid(weightGrid, type ,shape, size)
+}
+
 export function drawCircle(x, y, size, material = new THREE.MeshBasicMaterial({ color: 0x800000 })) {
   console.log("drawCircle");
   // draw Attractor Curves
-  let circle = getCircle(x, y, size, material)
-  scene.add(circle);
-  shapeChangeGrid(weightGrid, circle, size*2)
+  let shape = getCircle(x, y, size, material)
+  let type = "circle"
+  scene.add(shape);
+  shapeChangeGrid(weightGrid, type, shape, size)
 }
 
 export function drawRectangle(x, y, width, height, material= new THREE.MeshBasicMaterial({ color: 0x800000 })) {
     console.log("drawRectangle");
+    let type = "drawRectangle"
     // draw Attractor Curves
-    scene.add(getRectangle(x, y, width,height, material));
+    let shape = getRectangle(x, y, type, width, height, material)
+    let size = width * height
+    scene.add(shape);
+    shapeChangeGrid(weightGrid, type, shape, size)
+
   }
 
 export function drawBoundary(height, width) {
@@ -76,7 +83,9 @@ export function drawWeightGrid(weightGrid) {
   }
   for (let k = 0; k < weightGrid.points.length; k++) {
     console.log("weightGrid.points[k].wSize=",weightGrid.points[k].wSize);
-    newGridPoints.add(getPoint(weightGrid.points[k].point, weightGrid.points[k].wSize, weightGrid.points[k].wProgram));
+    newGridPoints.add(getPoint(weightGrid.points[k].point, weightGrid.points[k].wSize, weightGrid.points[k].wProgram, weightGrid.points[k].wDensity, weightGrid.points[k].wHeight));
+
+
   }
 
   scene.add(newGrid);

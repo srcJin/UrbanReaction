@@ -79,9 +79,10 @@ export function getGrid(xoff, yoff, polygon) {
       if (pt) {
         var ptObj = {
           point: new THREE.Vector3(pt.x, 0, pt.y),
-          wHeight: 1,
           wSize: 1,
           wProgram: 1,
+          wDensity: 1,
+          wHeight: 1,
         };
       }
       grid.push(ptObj);
@@ -91,12 +92,6 @@ export function getGrid(xoff, yoff, polygon) {
   return { points: grid, lineX: lineX, lineZ: lineZ };
 }
 
-export function refreshGrid(weightGrid) {
-  console.log("refreshGrid");
-  for (let point of weightGrid.points) {
-  }
-  console.log("refreshGrid point=", weightGrid.points);
-}
 
 export function curveChangeGrid(weightGrid, points, threshold) {
   if (points != null && weightGrid != []) {
@@ -122,7 +117,7 @@ export function curveChangeGrid(weightGrid, points, threshold) {
   console.log("weightGrid after curveChangeGrid=", weightGrid);
 }
 
-export function shapeChangeGrid(weightGrid, shape, size) {
+export function shapeChangeGrid(weightGrid, type, shape, size) {
   if (shape != null && weightGrid != []) {
     console.log("shapeChangeGrid shape= ", shape);
 
@@ -130,18 +125,28 @@ export function shapeChangeGrid(weightGrid, shape, size) {
     for (let i = 0; i < weightGrid.points.length; i++) {
       let gridPtX = weightGrid.points[i].point.x;
       let gridPtZ = weightGrid.points[i].point.z;
-      let centralX = shape.position.x
-      let centralZ = shape.position.z
+      let centralX = shape.position.x;
+      let centralZ = shape.position.z;
+      
       // step 2: get distance between all grid points and curve points
-        let distance = getDistance(gridPtX,gridPtZ,centralX,centralX)
-        //console.log(`gridPtX=${gridPtX},gridPtZ=${gridPtZ},crvPtX=${crvPtX},crvPtZ=${crvPtZ}`)
-        //console.log("getDistance = ",distance)
-      if (1 < distance < size) {
-        weightGrid.points[i].wSize =
-          weightGrid.points[i].wSize + size / distance;
+      let distance = getDistance(gridPtX, gridPtZ, centralX, centralZ);
+      let change
+      if (1 < distance < size * 5) {
+        change = size / (distance/5);
       } else if (distance <= 1) {
-        weightGrid.points[i].wSize = weightGrid.points[i].wSize + size;
+        change = size;
       }
+
+      if (type === "circle") {
+        weightGrid.points[i].wDensity += change * 100
+      }
+      if (type === "rectangle") {
+        weightGrid.points[i].wHeight += change * 100
+      }
+      if (type === "star") {
+        weightGrid.points[i].wProgram += change * 100
+      }
+
     }
   }
   console.log("weightGrid after shapeChangeGrid=", weightGrid);

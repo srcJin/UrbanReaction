@@ -26,7 +26,7 @@ export function getCurve(controlPoints) {
     const t = i / l;
     spline.getPoint(t, point);
     positions.push(point.x, point.y, point.z);
-    points.push(new THREE.Vector3(point.x, point.y, point.z))
+    points.push(new THREE.Vector3(point.x, point.y, point.z));
   }
 
   // Line2 ( LineGeometry, LineMaterial )
@@ -37,7 +37,7 @@ export function getCurve(controlPoints) {
   // curve.computeLineDistances();
   curve.scale.set(1, 1, 1);
   // console.log("spline=",spline);
-  return {line2:curve, points:points};
+  return { line2: curve, points: points };
 }
 
 export function getPolyline(
@@ -58,13 +58,13 @@ export function getPolyline(
 
   // here I add 5 to y position
   for (let i = 0, l = pointList.length; i < l; i++) {
-    positions.push(pointList[i].x, pointList[i].y+5, pointList[i].z);
+    positions.push(pointList[i].x, pointList[i].y + 5, pointList[i].z);
     // if closed polyline, add the first point
   }
 
   if (isClosed) {
-    positions.push(pointList[0].x, pointList[0].y+5, pointList[0].z);
-    }
+    positions.push(pointList[0].x, pointList[0].y + 5, pointList[0].z);
+  }
 
   // Line2 ( LineGeometry, LineMaterial )
   const geometry = new LineGeometry();
@@ -113,12 +113,7 @@ export function getStar(
 }
 
 // draw Attractor point
-export function getCircle(
-  posX,
-  posZ,
-  size,
-  material
-) {
+export function getCircle(posX, posZ, size, material) {
   let circleGeometry = new THREE.CircleGeometry(1, 32);
   let circleMesh = new THREE.Mesh(circleGeometry, material);
   circleMesh.rotation.x = -Math.PI / 2;
@@ -127,40 +122,44 @@ export function getCircle(
   return circleMesh;
 }
 
-export function getRectangle(
-    posX,
-    posZ,
-    width,
-    height,
-    material
-  ) {
-    let planeGeometry = new THREE.PlaneGeometry(width, height);
-    let planeMesh = new THREE.Mesh(planeGeometry, material);
-    planeMesh.rotation.x = -Math.PI / 2;
-    planeMesh.position.set(posX, 100, posZ);
-    return planeMesh;
-  }
+export function getRectangle(posX, posZ, width, height, material) {
+  let planeGeometry = new THREE.PlaneGeometry(width, height);
+  let planeMesh = new THREE.Mesh(planeGeometry, material);
+  planeMesh.rotation.x = -Math.PI / 2;
+  planeMesh.position.set(posX, 100, posZ);
+  return planeMesh;
+}
 
 // Draw individual point
-export function getPoint(Vector3, wSize, wProgram ) {
+export function getPoint(Vector3, wSize, wProgram, wDensity, wHeight) {
   // console.log("getPoint");
   let geometry = new THREE.BufferGeometry(); //Declare a Geometry object
   const vertices = new Float32Array([Vector3.x, Vector3.y, Vector3.z]);
   geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
   // console.log("vertices=",vertices);
   // Spawn point model
-  let material =  new THREE.PointsMaterial({
-    color: 0xE42251,    //Set the color, default 0xFFFFFF
-    vertexColors: false, //Define whether the material uses vertex color, the default is false ---If this option is set to true, the color attribute is invalid
-    size: wSize*100,          //Define the size of the particles. The default is 1.0
+  let r = wProgram < 256 ? wProgram : 255;
+  let g = wDensity < 256 ? wDensity : 255;
+  let b = wHeight < 256 ? wHeight : 255;
+
+  const color = new THREE.Color();
+  let colors = [];
+  color.setRGB(1 - r/255, 1 - g/255, 1 - b/255);
+  colors = [color.r, color.g, color.b];
+  geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+
+  let material = new THREE.PointsMaterial({
+    // color: 0x474857,    //Set the color, default 0xFFFFFF, here use vertex color
+    vertexColors: true, //Define whether the material uses vertex color, the default is false ---If this option is set to true, the color attribute is invalid
+    size: wSize * 100, //Define the size of the particles. The default is 1.0
     transparent: true,
-    opacity: 1
+    opacity: 1,
   });
 
   let point = new THREE.Points(geometry, material);
-  // console.log("point=",point);
-  //Add the model to the scene
+
   return point;
+
 }
 
 export function setMesh(cell, height, material) {
@@ -228,7 +227,6 @@ export function getShape(cell) {
   }
 }
 
-
 // disable rectangle boundary for now
 // export function getBoundary(boundaryWidth, boundaryHeight) {
 //     // draw Boundary
@@ -284,9 +282,6 @@ export function getBoundary(pointArray) {
   // group.add(getLine(d,a,boundaryMaterial))
   // return group;
 }
-
-
-
 
 // function getShape(pList){
 // 	var shape = new THREE.Shape();
@@ -345,4 +340,3 @@ export function getLine(
 
   return line;
 }
-

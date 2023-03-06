@@ -153,9 +153,7 @@ export class ToolButtons extends React.Component {
 
     const canvas = new Canvas();
     canvas.emptyScene()
-
     drawWeightGrid(weightGrid)
-
     // @todo
   } 
   
