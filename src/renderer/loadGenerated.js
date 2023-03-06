@@ -4,35 +4,10 @@ import { Line2 } from "three/examples/jsm/lines/Line2.js";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 import { LineGeometry } from "three/examples/jsm/lines/LineGeometry.js";
 import axios from "axios";
-import { readNearbyPoints } from "./GridEditor";
 import { setMesh, getPolyline } from "./getGeometries";
 // import blocks from "./blocks.json";
-
-async function loadJSON(name) {
-  // const promisedObject = fetch("./generated/"+ name +".json")
-  // const promisedObject = fetch("./blocks.json")
-  // .then((response) => response.json())
-  // .then((data) => {return data;});
-  // axios({
-  //     method: "GET",
-  //     url: "./generated/blocks.json",
-  //   }).then(function (response) {
-  //     console.log(response.data)
-  //   });
-  // axios.get("./blocks.json").then(response => {
-  //     console.log(response.data);
-  // }).catch(error=> {
-  //     console.log(error);
-  // })
-  // console.log("loadJson=",{name:name, promisedObject:promisedObject})
-  // return {name:name, promisedObject:promisedObject}
-}
-
-function usingJSON(object) {
-  object.promisedObject.then((data) => {
-    console.log(object.name + " = ", data);
-  });
-}
+import { weightGrid } from "./GridEditor.js";
+import { getDistance } from "./myMath.js";
 
 function convertGeneratedPointListToThreeVectorList(list, scale = 1) {
   let threePointList = [];
@@ -76,54 +51,17 @@ export function convertJSONToPolyline(
   return group;
 }
 
-export function convertJSONToMeshes(object, isBuilding = false, material, scale = 4 ) {
+export function convertJSONToMeshes(
+  object,
+  material,
+  scale = 4
+) {
   let blocksThree = convertGeneratedPointListToThreeVectorList(object, scale);
-  if (isBuilding){
-    // readNearbyPoints(blocksThree, 300);
-    let output = redrawGeneratedBuildings(blocksThree, material)
-    return output;
-  } else {
-    let output = redrawGeneratedMeshes(blocksThree, isBuilding, material);
-    return output;
-  } 
+  let output = redrawGeneratedMeshes(blocksThree, material);
+  return output;
 }
 
-function redrawGeneratedBuildings(blocksThree, material) {
-  //console.log("------------------------------------")
-  //console.log("redrawBuildings!!!!!!!!!!!!!")
-
-  let sumwSize = 0;
-  let avgwSize = 0;
-  let group = new THREE.Group();
-  console.log("redrawGeneratedBuildings blocksThree", blocksThree)
-
-  for (let i = 0; i < blocksThree.length; i++) {
-      // read weight
-      sumwSize = 0;
-      avgwSize = 0;
-      // console.log("clipperBuilding[j].nearbyPoints.length=",blocksThree[i].nearbyPoints.length)
-      // console.log("clipperBuilding[j].nearbyPoints[1].wSize",clipperBuilding[j].nearbyPoints[1].wSize)
-      
-      // @todo redraw buildings load nearbyPoints
-
-      // for (let j = 0; j < blocksThree[i].nearbyPoints.length; j++) {
-      //   //console.log(`clipperBuilding[${i}].nearbyPoints[${j}].wSize=${clipperBuilding[i].nearbyPoints[j].wSize}`)
-      //   // sumwSize = sumwSize + blocksThree[i].nearbyPoints[j].wSize
-      //   sumwSize = 100;
-      // }
-
-      // avgwSize=sumwSize/blocksThree[i].nearbyPoints.length
-      //console.log("redrawBuildings, avgwSize= ",avgwSize)
-      group.add(setMesh(blocksThree[i], 40, material));
-
-  }
-  // console.log("group=",group);
-  return group;
-}
-
-
-
-function redrawGeneratedMeshes(blocksThree, isBuilding, material) {
+function redrawGeneratedMeshes(blocksThree, material) {
   //console.log("------------------------------------")
   //console.log("redrawBuildings!!!!!!!!!!!!!")
 
@@ -132,23 +70,7 @@ function redrawGeneratedMeshes(blocksThree, isBuilding, material) {
   let group = new THREE.Group();
 
   for (let i = 0; i < blocksThree.length; i++) {
-    if (isBuilding) {
-      // read weight
-      sumwSize = 0;
-      avgwSize = 0;
-      // console.log("clipperBuilding[j].nearbyPoints.length=",blocksThree[i].nearbyPoints.length)
-      // console.log("clipperBuilding[j].nearbyPoints[1].wSize",clipperBuilding[j].nearbyPoints[1].wSize)
-      for (let j = 0; j < blocksThree[i].nearbyPoints.length; j++) {
-        //console.log(`clipperBuilding[${i}].nearbyPoints[${j}].wSize=${clipperBuilding[i].nearbyPoints[j].wSize}`)
-        // sumwSize = sumwSize + blocksThree[i].nearbyPoints[j].wSize
-        sumwSize = 100;
-      }
-      // avgwSize=sumwSize/blocksThree[i].nearbyPoints.length
-      //console.log("redrawBuildings, avgwSize= ",avgwSize)
-      group.add(setMesh(blocksThree[i], 40, material));
-    } else {
       group.add(setMesh(blocksThree[i], 1, material));
-    }
   }
   // console.log("group=",group);
   return group;
@@ -182,4 +104,98 @@ function redrawGeneratedContext(blocksThree) {
   }
 }
 
-let scale = 4;
+export function convertJSONToBuildings(
+  object,
+  material,
+  scale = 4
+) {
+  let blocksThree = convertGeneratedPointListToThreeVectorList(object, scale);
+    let processedBlocksThree = readNearbyPoints(weightGrid, blocksThree, 300);
+    let output = redrawGeneratedBuildings(processedBlocksThree, 1, material);
+    return output;
+}
+
+export function readNearbyPoints(weightGrid, blocksThree, threshold) {
+  //console.log("findCenterPoint blockPointLists=",blockPointLists)
+
+  // get center points of building
+  let centerPoint;
+  // for each building in the list
+  for (let i = 0; i < blocksThree.length; i++) {
+    let sumX = 0;
+    let sumZ = 0;
+    let avgX = 0;
+    let avgZ = 0;
+    // for each point in a building, calculate average X and Z coordination
+    for (let j = 0; j < blocksThree[i].length; j++) {
+      sumX = sumX + blocksThree[i][j].x;
+      sumZ = sumZ + blocksThree[i][j].z;
+    }
+    avgX = sumX / blocksThree[i].length;
+    avgZ = sumZ / blocksThree[i].length;
+    centerPoint = new THREE.Vector3(avgX, 0, avgZ);
+    // add the block central points to the scene
+    // scene.add(getPoint(centerPoint, pointMaterialRed));
+    // add this parameter to objects
+    blocksThree[i].centerPoint = centerPoint;
+  }
+
+  // now we have a grid made by central points of each
+  // now get the nearbypoints for each block
+  // initiate the nearbyPoints
+
+  // read nearby points
+  for (let i = 0; i < blocksThree.length; i++) {
+    // initiate nearbyPoints array
+    blocksThree[i].nearbyPoints = [];
+    for (let j = 0; j < weightGrid.points.length; j++) {
+      let gridPtX = weightGrid.points[j].point.x;
+      let gridPtZ = weightGrid.points[j].point.z;
+      // get distance between all grid points and mid points
+      let distance = getDistance(
+        gridPtX,
+        gridPtZ,
+        centerPoint.x,
+        centerPoint.z
+      );
+      if (distance <= threshold) {
+        // push the nearby points to the block object
+        blocksThree[i].nearbyPoints.push(weightGrid.points[i]);
+      }
+    }
+  }
+  console.log("blockPointLists=", blocksThree);
+  let processedBlocksThree = blocksThree;
+  return processedBlocksThree;
+}
+
+function redrawGeneratedBuildings(blocksThree, heightScale = 1, material) {
+  //console.log("------------------------------------")
+  //console.log("redrawBuildings!!!!!!!!!!!!!")
+
+  let sumwSize = 0;
+  let baseHeight = 100
+  let avgwSize = 0;
+  let group = new THREE.Group();
+  console.log("redrawGeneratedBuildings blocksThree", blocksThree);
+
+  for (let i = 0; i < blocksThree.length; i++) {
+    // read weight
+
+    // @todo redraw buildings load nearbyPoints
+    
+    sumwSize = baseHeight;
+
+    for (let j = 0; j < blocksThree[i].nearbyPoints.length; j++) {
+      // console.log(`blocksThree[${i}].nearbyPoints[${j}].wSize=${blocksThree[i].nearbyPoints[j].wSize}`)
+      sumwSize = sumwSize + blocksThree[i].nearbyPoints[j].wSize * heightScale;
+      //   // sumwSize = 100;
+    }
+
+    // avgwSize=sumwSize/blocksThree[i].nearbyPoints.length
+    //console.log("redrawBuildings, avgwSize= ",avgwSize)
+    group.add(setMesh(blocksThree[i], sumwSize, material));
+  }
+  // console.log("group=",group);
+  return group;
+}

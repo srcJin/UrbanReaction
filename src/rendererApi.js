@@ -82,7 +82,7 @@ export function drawWeightGrid(weightGrid) {
     newGrid.add(weightGrid.lineZ[j]);
   }
   for (let k = 0; k < weightGrid.points.length; k++) {
-    console.log("weightGrid.points[k].wSize=",weightGrid.points[k].wSize);
+    // console.log("weightGrid.points[k].wSize=",weightGrid.points[k].wSize);
     newGridPoints.add(getPoint(weightGrid.points[k].point, weightGrid.points[k].wSize, weightGrid.points[k].wProgram, weightGrid.points[k].wDensity, weightGrid.points[k].wHeight));
 
 

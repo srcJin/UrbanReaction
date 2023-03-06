@@ -125,7 +125,7 @@ export var pointMaterialPurple = new THREE.PointsMaterial({
 
 export const buildingMaterial = 
     new THREE.MeshPhongMaterial({
-       color : 0xE1E1E1, 
+       color : 0xAAAAAA, 
        transparent: false, 
        opacity: 1 
 })

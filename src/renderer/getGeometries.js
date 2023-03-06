@@ -111,7 +111,6 @@ export function getStar(
   starMesh.scale.set(size, size, size);
   return starMesh;
 }
-
 // draw Attractor point
 export function getCircle(posX, posZ, size, material) {
   let circleGeometry = new THREE.CircleGeometry(1, 32);
@@ -163,30 +162,12 @@ export function getPoint(Vector3, wSize, wProgram, wDensity, wHeight) {
 }
 
 export function setMesh(cell, height, material) {
-  //console.log("mat=" , mat)
-
   if (material === undefined) {
-    //     const mat_1 = new THREE.MeshPhongMaterial({
-    //         color: 0x364f6b,
-    //         transparent: false,
-    //         opacity: 1,
-    //     });
-    //     const mat_2 = new THREE.MeshPhongMaterial({
-    //         color: 0x3fc1c9,
-    //         transparent: false,
-    //         opacity: 1,
-    //     });
     const material = new THREE.MeshPhongMaterial({
       color: 0xf5f5f5,
       transparent: false,
       opacity: 1,
     });
-    //     const mat_4 = new THREE.MeshPhongMaterial({
-    //         color: 0xfc5185,
-    //         transparent: false,
-    //         opacity: 1,
-    //     });
-    //     material = mat_3;
   }
 
   var extrudeSettings = {
@@ -227,39 +208,6 @@ export function getShape(cell) {
   }
 }
 
-// disable rectangle boundary for now
-// export function getBoundary(boundaryWidth, boundaryHeight) {
-//     // draw Boundary
-
-//     let boundaryGeometry = new LineGeometry();
-//     let a = new THREE.Vector3(-boundaryWidth / 2,
-//         0,
-//         -boundaryHeight / 2)
-//     let b = new THREE.Vector3(-boundaryWidth / 2,
-//         0,
-//         boundaryHeight / 2)
-//     let c = new THREE.Vector3(boundaryWidth / 2,
-//         0,
-//         boundaryHeight / 2)
-//     let d = new THREE.Vector3(boundaryWidth / 2,
-//         0,
-//         -boundaryHeight / 2,)
-
-//     // Material
-//     let boundaryMaterial = new LineMaterial({
-//         color: 0xdd2222,
-//         linewidth: 4,
-//     });
-//     // resolution will be calculated in renderer
-//     boundaryMaterial.resolution.set(window.innerWidth, window.innerHeight);
-//     let group = new THREE.Group()
-//     group.add(getLine(a,b,boundaryMaterial))
-//     group.add(getLine(b,c,boundaryMaterial))
-//     group.add(getLine(c,d,boundaryMaterial))
-//     group.add(getLine(d,a,boundaryMaterial))
-
-//     return group;
-// }
 
 export function getBoundary(pointArray) {
   // draw Boundary
@@ -282,21 +230,6 @@ export function getBoundary(pointArray) {
   // group.add(getLine(d,a,boundaryMaterial))
   // return group;
 }
-
-// function getShape(pList){
-// 	var shape = new THREE.Shape();
-// 	var o = pList[0]
-// 	shape.moveTo(o.x, o.z)
-
-// 	for (var i = 0; i < pList.length; i++) {
-// 		var pt = pList[i]
-// 		shape.lineTo(pt.x, pt.z)
-// 	}
-
-// 	shape.autoClose = true;
-
-// 	return shape;
-// }
 
 // modified drawLine function from explorer.js
 export function drawLine(a, b, off, material = bluePaint) {
@@ -340,3 +273,37 @@ export function getLine(
 
   return line;
 }
+
+// disable rectangle boundary for now
+// export function getBoundary(boundaryWidth, boundaryHeight) {
+//     // draw Boundary
+
+//     let boundaryGeometry = new LineGeometry();
+//     let a = new THREE.Vector3(-boundaryWidth / 2,
+//         0,
+//         -boundaryHeight / 2)
+//     let b = new THREE.Vector3(-boundaryWidth / 2,
+//         0,
+//         boundaryHeight / 2)
+//     let c = new THREE.Vector3(boundaryWidth / 2,
+//         0,
+//         boundaryHeight / 2)
+//     let d = new THREE.Vector3(boundaryWidth / 2,
+//         0,
+//         -boundaryHeight / 2,)
+
+//     // Material
+//     let boundaryMaterial = new LineMaterial({
+//         color: 0xdd2222,
+//         linewidth: 4,
+//     });
+//     // resolution will be calculated in renderer
+//     boundaryMaterial.resolution.set(window.innerWidth, window.innerHeight);
+//     let group = new THREE.Group()
+//     group.add(getLine(a,b,boundaryMaterial))
+//     group.add(getLine(b,c,boundaryMaterial))
+//     group.add(getLine(c,d,boundaryMaterial))
+//     group.add(getLine(d,a,boundaryMaterial))
+
+//     return group;
+// }
