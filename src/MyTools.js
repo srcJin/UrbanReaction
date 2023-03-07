@@ -20,7 +20,20 @@ let c = new THREE.Vector3(-3000, 0, -3000);
 let d = new THREE.Vector3(3000, 0, -3000);
 export const weightGridBoundary = [a, b, c, d];
 
+// weightGrid is a global variable
 export let weightGrid = getGrid(150, 150, weightGridBoundary);
+//once it is loaded, it becomes a new weightGrid
+
+export function returnWeightGrid() {
+  console.log("returnWeightGrid,weightGrid= ",weightGrid)
+  return weightGrid;
+}
+
+export function setWeightGrid(newWeightGrid) {
+  weightGrid = newWeightGrid;
+  console.log("setWeightGrid,weightGrid= ",weightGrid)
+}
+
 
 console.log("weightGrid=", weightGrid);
 
@@ -77,8 +90,8 @@ export class ToolButtons extends React.Component {
   }
   axis() {
     let controlPoints = [
-      new THREE.Vector3(5000, 0, -5000),
-      new THREE.Vector3(-5000, 0, 5000),
+      new THREE.Vector3(5000, 0, 5000),
+      new THREE.Vector3(-5000, 0, -5000),
     ];
     drawCurve(controlPoints)
     console.log("Triggering axis");
@@ -118,7 +131,7 @@ export class ToolButtons extends React.Component {
     console.log("Triggering gridField");
     myAddGrid(new Vector(positx, posity), randInt(50,100), 1, 0.5);
     // divide by scale (now is 4). offset by 2000, move to left corner
-    drawRectangle(positx-1200,posity-1200,200,200);
+    drawRectangle(100,100,200,200);
   }
 
   radialField() {

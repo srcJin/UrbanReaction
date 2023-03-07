@@ -6,8 +6,11 @@ import { LineGeometry } from "three/examples/jsm/lines/LineGeometry.js";
 import axios from "axios";
 import { setMesh, getPolyline } from "./getGeometries";
 // import blocks from "./blocks.json";
-import { weightGrid } from "./GridEditor.js";
+import { weightGrid,returnWeightGrid,setWeightGrid } from "../MyTools.js";
 import { getDistance } from "./myMath.js";
+import { scene } from "../Renderer.js";
+import { getPoint } from "./getGeometries";
+import { pointMaterialRed } from "./Materials.js";
 
 function convertGeneratedPointListToThreeVectorList(list, scale = 1) {
   let threePointList = [];
@@ -102,18 +105,19 @@ function redrawGeneratedContext(blocksThree) {
 
 export function convertJSONToBuildings(object, material, weightGrid, scale = 4) {
   let blocksThree = convertGeneratedPointListToThreeVectorList(object, scale);
-  let processedBlocksThree = readNearbyPoints(weightGrid, blocksThree, 150);
+  console.log("!!!!!!!convertJSONToBuildings processedBlocksThree, readNearbyPoints")
+  let processedBlocksThree = readNearbyPoints(returnWeightGrid(), blocksThree, 150);
   console.log(
     "redrawGeneratedContext,processedBlocksThree=",
     processedBlocksThree
   );
-  let output = redrawGeneratedBuildings(processedBlocksThree, 100, material);
+  let output = redrawGeneratedBuildings(processedBlocksThree, 50, material);
   return output;
 }
 
 export function readNearbyPoints(weightGrid, blocksThree, threshold) {
   //console.log("findCenterPoint blockPointLists=",blockPointLists)
-
+  console.log("readNearbyPoints, weightGrid=",weightGrid)
   // get center points of building
   let centerPoint;
   // for each building in the list
@@ -147,12 +151,14 @@ export function readNearbyPoints(weightGrid, blocksThree, threshold) {
     for (let m = 0; m < weightGrid.points.length; m++) {
       let gridPtX = weightGrid.points[m].point.x;
       let gridPtZ = weightGrid.points[m].point.z;
+      let centerPtX = blocksThree[k].centerPoint.x;
+      let centerPtZ = blocksThree[k].centerPoint.z;
       // get distance between all grid points and mid points
       let distance = getDistance(
         gridPtX,
         gridPtZ,
-        centerPoint.x,
-        centerPoint.z
+        centerPtX,
+        centerPtZ
       );
       if (distance <= threshold) {
         // push the nearby points to the block object

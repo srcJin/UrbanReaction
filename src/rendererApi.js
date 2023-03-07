@@ -14,7 +14,7 @@ import {
   getRectangle
 } from "./renderer/getGeometries.js";
 
-import { weightGrid } from "./MyTools";
+import { returnWeightGrid, setWeightGrid } from "./MyTools";
 import { curveChangeGrid, shapeChangeGrid } from "./renderer/GridEditor";
 
 export function drawCurve(controlPoints) {
@@ -23,7 +23,7 @@ export function drawCurve(controlPoints) {
   let curveObj = getCurve(controlPoints)
   let curve = curveObj.line2
   // change the weightGrid from curve
-  curveChangeGrid(weightGrid, curveObj.points,500)
+  curveChangeGrid(returnWeightGrid(), curveObj.points,500)
   scene.add(curve);
 }
 
@@ -32,26 +32,26 @@ export function drawStar(x, y, size) {
   let shape = getStar(x, y, size)
   scene.add(shape);
   let type = "star"
-  shapeChangeGrid(weightGrid, type ,shape, size)
+  shapeChangeGrid(returnWeightGrid(), type ,shape, size)
 }
 
-export function drawCircle(x, y, size, material = new THREE.MeshBasicMaterial({ color: 0x800000 })) {
+export function drawCircle(x, y, size, material = new THREE.MeshBasicMaterial({ color: 0xFE8484 })) {
   console.log("drawCircle");
   // draw Attractor Curves
   let shape = getCircle(x, y, size, material)
   let type = "circle"
   scene.add(shape);
-  shapeChangeGrid(weightGrid, type, shape, size)
+  shapeChangeGrid(returnWeightGrid(), type, shape, size)
 }
 
-export function drawRectangle(x, y, width, height, material= new THREE.MeshBasicMaterial({ color: 0x800000 })) {
+export function drawRectangle(x, y, width, height, material= new THREE.MeshBasicMaterial({ color: 0xFE8484 })) {
     console.log("drawRectangle");
-    let type = "drawRectangle"
+    let type = "rectangle"
     // draw Attractor Curves
     let shape = getRectangle(x, y, type, width, height, material)
     let size = width * height
     scene.add(shape);
-    shapeChangeGrid(weightGrid, type, shape, size)
+    shapeChangeGrid(returnWeightGrid(), type, shape, size)
 }
 
 export function drawBoundary(height, width) {
@@ -67,22 +67,22 @@ export function drawBoundary(height, width) {
   scene.add(getPolyline(pointList, true));
 }
 
-export function drawWeightGrid(weightGrid) {
+export function drawWeightGrid(returnWeightGrid) {
   // draw weight Grid
   // process the input array into three object groups
   const newGrid = new THREE.Group();
   const newGridPoints = new THREE.Group();
-  for (let i = 0; i < weightGrid.lineX.length; i++) {
+  for (let i = 0; i < returnWeightGrid.lineX.length; i++) {
     // scene.add(Grid.lineX[i])
-    newGrid.add(weightGrid.lineX[i]);
+    newGrid.add(returnWeightGrid.lineX[i]);
   }
-  for (let j = 0; j < weightGrid.lineZ.length; j++) {
+  for (let j = 0; j < returnWeightGrid.lineZ.length; j++) {
     // scene.add(Grid.lineZ[j])
-    newGrid.add(weightGrid.lineZ[j]);
+    newGrid.add(returnWeightGrid.lineZ[j]);
   }
-  for (let k = 0; k < weightGrid.points.length; k++) {
+  for (let k = 0; k < returnWeightGrid.points.length; k++) {
     // console.log("weightGrid.points[k].wSize=",weightGrid.points[k].wSize);
-    newGridPoints.add(getPoint(weightGrid.points[k].point, weightGrid.points[k].wSize, weightGrid.points[k].wProgram, weightGrid.points[k].wDensity, weightGrid.points[k].wHeight));
+    newGridPoints.add(getPoint(returnWeightGrid.points[k].point, returnWeightGrid.points[k].wSize, returnWeightGrid.points[k].wProgram, returnWeightGrid.points[k].wDensity, returnWeightGrid.points[k].wHeight));
 
   }
 

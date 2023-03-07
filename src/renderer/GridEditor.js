@@ -8,7 +8,7 @@ import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 import { LineGeometry } from "three/examples/jsm/lines/LineGeometry";
 import { getLineLength, evaluateCrv, checkLineIntersection } from "./myMath.js";
 import { getLine } from "./getGeometries.js";
-import { weightGrid } from "../MyTools.js";
+import { returnWeightGrid, setWeightGrid } from "../MyTools.js";
 // grid parameters
 
 
@@ -107,6 +107,7 @@ export function curveChangeGrid(weightGrid, points, threshold) {
     }
   }
   console.log("weightGrid after curveChangeGrid=", weightGrid);
+  setWeightGrid(weightGrid)
 }
 
 export function shapeChangeGrid(weightGrid, type, shape, size) {
@@ -120,7 +121,7 @@ export function shapeChangeGrid(weightGrid, type, shape, size) {
       let centralX = shape.position.x;
       let centralZ = shape.position.z;
       
-      // step 2: get distance between all grid points and curve points
+      // step 2: get distance between all grid points and geometry central points
       let distance = getDistance(gridPtX, gridPtZ, centralX, centralZ);
       let change
       if (1 < distance < size * 5) {
@@ -142,6 +143,7 @@ export function shapeChangeGrid(weightGrid, type, shape, size) {
     }
   }
   console.log("weightGrid after shapeChangeGrid=", weightGrid);
+  setWeightGrid(weightGrid)
 }
 
 // function shapeChangeGrid(weightGrid, shapes, threshold) {

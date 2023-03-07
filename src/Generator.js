@@ -16,7 +16,7 @@ import {
   minorRoadMaterial,
   waterMaterial,
 } from "./renderer/Materials.js";
-import { weightGrid } from "./MyTools";
+import { returnWeightGrid, setWeightGrid } from "./MyTools";
 import { drawWeightGrid } from "./rendererApi";
 export class Canvas extends React.Component {
   hello() {
@@ -63,9 +63,15 @@ export class Canvas extends React.Component {
     scene.add(convertJSONToPolyline(jsonPackage.minorRoads, minorRoadMaterial));
     scene.add(convertJSONToPolyline(jsonPackage.mainRoads, majorRoadMaterial));
     scene.add(convertJSONToPolyline(jsonPackage.coastline, coastlineMaterial));
+    
     scene.add(
-      convertJSONToBuildings(jsonPackage.blocks, buildingMaterial, weightGrid)
+      convertJSONToBuildings(
+        jsonPackage.blocks,
+        buildingMaterial,
+        returnWeightGrid()
+      )
     );
+    ;
 
     renderer.setSize(500, 500);
     renderer.setPixelRatio(1);
@@ -105,7 +111,7 @@ export class Canvas extends React.Component {
     scene.add(convertJSONToPolyline(jsonPackage.mainRoads, majorRoadMaterial));
     scene.add(convertJSONToPolyline(jsonPackage.coastline, coastlineMaterial));
     scene.add(
-      convertJSONToBuildings(jsonPackage.blocks, buildingMaterial, weightGrid)
+      convertJSONToBuildings(jsonPackage.blocks, buildingMaterial, returnWeightGrid())
     );
 
     //

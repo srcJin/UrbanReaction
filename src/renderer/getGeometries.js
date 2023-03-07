@@ -126,6 +126,7 @@ export function getRectangle(posX, posZ, width, height, material) {
   let planeMesh = new THREE.Mesh(planeGeometry, material);
   planeMesh.rotation.x = -Math.PI / 2;
   planeMesh.position.set(posX, 100, posZ);
+  console.log("getRectangle planeMesh", planeMesh)
   return planeMesh;
 }
 
