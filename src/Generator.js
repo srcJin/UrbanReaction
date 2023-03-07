@@ -27,7 +27,7 @@ export class Canvas extends React.Component {
     console.log("refreshing 3d");
     // remove meshes from scene, keep lights
     for (let i = 0; i < scene.children.length; i++) {
-      console.log(scene);
+      // console.log(scene);
       if (scene.children) {
         if (scene.children[i].type !== undefined) {
 

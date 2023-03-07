@@ -137,7 +137,7 @@ export function shapeChangeGrid(weightGrid, type, shape, size) {
         weightGrid.points[i].wHeight += change * 100
       }
       if (type === "star") {
-        weightGrid.points[i].wProgram += change * 100
+        weightGrid.points[i].wProgram += change * 50
       }
 
     }

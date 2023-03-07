@@ -179,7 +179,8 @@ function redrawGeneratedBuildings(blocksThree, heightScale = 1, material) {
   let baseHeight = 100;
   let avgwSize = 0;
   let group = new THREE.Group();
-  // console.log("redrawGeneratedBuildings blocksThree", blocksThree);
+  let sumwProgram = 0
+  console.log("redrawGeneratedBuildings blocksThree", blocksThree);
 
   for (let i = 0; i < blocksThree.length; i++) {
     // read weight
@@ -187,16 +188,22 @@ function redrawGeneratedBuildings(blocksThree, heightScale = 1, material) {
     // @todo redraw buildings load nearbyPoints
 
     sumwSize = baseHeight;
+    sumwProgram = 0;
 
     for (let j = 0; j < blocksThree[i].nearbyPoints.length; j++) {
-      // console.log(`blocksThree[${i}].nearbyPoints[${j}].wSize=${blocksThree[i].nearbyPoints[j].wSize}`)
       sumwSize = sumwSize + blocksThree[i].nearbyPoints[j].wSize * heightScale;
-      //   // sumwSize = 100;
+      sumwProgram = sumwProgram + blocksThree[i].nearbyPoints[j].wProgram / 100 ;
     }
+    // console.log('sumwProgram=', sumwProgram)
+    let newMaterial = new THREE.MeshPhongMaterial({
+      color : new THREE.Color(sumwProgram, 0.8, 0.8), 
+      transparent: false, 
+      opacity: 1 
+   })
 
     // avgwSize=sumwSize/blocksThree[i].nearbyPoints.length
     //console.log("redrawBuildings, avgwSize= ",avgwSize)
-    group.add(setMesh(blocksThree[i], sumwSize, material));
+    group.add(setMesh(blocksThree[i], sumwSize, newMaterial));
   }
   // console.log("group=",group);
   return group;

@@ -58,11 +58,11 @@ export function drawRectangle(x, y, width, height, material= new THREE.MeshBasic
 export function drawBoundary(height, width) {
   console.log("star");
 //   let a = new THREE.Vector3(0,0,0)
-  let a = new THREE.Vector3(-1000,0,1000)
-  let b = new THREE.Vector3(1000,0,1000)
-  let c = new THREE.Vector3(1600,0,600)
-  let d = new THREE.Vector3(1000,0,-1000)
-  let e = new THREE.Vector3(-1000,0,-1000)
+  let a = new THREE.Vector3(-1500,0,1500)
+  let b = new THREE.Vector3(1500,0,1500)
+  let c = new THREE.Vector3(2000,0,1000)
+  let d = new THREE.Vector3(1500,0,-1500)
+  let e = new THREE.Vector3(-1500,0,-1500)
 
   let pointList = [a,b,c,d,e]
   scene.add(getPolyline(pointList, true));

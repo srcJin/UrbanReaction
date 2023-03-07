@@ -116,12 +116,12 @@ export class ToolButtons extends React.Component {
 
   circle() {
     console.log("Triggering circle");
-    drawCircle(400,300,200);
+    drawCircle(-400,-300,200);
   }
 
   star() {
     console.log("Triggering star");
-    drawStar(0,200,100);
+    drawStar(1300,400,300);
   }
 
   gridField() {
