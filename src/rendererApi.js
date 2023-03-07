@@ -14,7 +14,7 @@ import {
   getRectangle
 } from "./renderer/getGeometries.js";
 
-import { weightGrid } from "./renderer/GridEditor";
+import { weightGrid } from "./MyTools";
 import { curveChangeGrid, shapeChangeGrid } from "./renderer/GridEditor";
 
 export function drawCurve(controlPoints) {
@@ -23,7 +23,7 @@ export function drawCurve(controlPoints) {
   let curveObj = getCurve(controlPoints)
   let curve = curveObj.line2
   // change the weightGrid from curve
-  curveChangeGrid(weightGrid, curveObj.points,300)
+  curveChangeGrid(weightGrid, curveObj.points,500)
   scene.add(curve);
 }
 
@@ -52,8 +52,7 @@ export function drawRectangle(x, y, width, height, material= new THREE.MeshBasic
     let size = width * height
     scene.add(shape);
     shapeChangeGrid(weightGrid, type, shape, size)
-
-  }
+}
 
 export function drawBoundary(height, width) {
   console.log("star");
@@ -84,7 +83,6 @@ export function drawWeightGrid(weightGrid) {
   for (let k = 0; k < weightGrid.points.length; k++) {
     // console.log("weightGrid.points[k].wSize=",weightGrid.points[k].wSize);
     newGridPoints.add(getPoint(weightGrid.points[k].point, weightGrid.points[k].wSize, weightGrid.points[k].wProgram, weightGrid.points[k].wDensity, weightGrid.points[k].wHeight));
-
 
   }
 

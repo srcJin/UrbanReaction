@@ -7,10 +7,24 @@ import { randInt } from "three/src/math/MathUtils";
 import { Canvas } from "./Generator";
 import { myGenerateAll } from "./generatorApi";
 import { jsonPackage } from "./generatorApi";
-import { weightGrid, refreshGrid } from "./renderer/GridEditor";
+import { refreshGrid } from "./renderer/GridEditor";
 import { drawWeightGrid } from "./rendererApi";
-import {curveChangeGrid} from "./renderer/GridEditor"
-import { getGrid, weightGridBoundary } from "./renderer/GridEditor";
+import { curveChangeGrid } from "./renderer/GridEditor"
+import { getGrid } from "./renderer/GridEditor";
+
+
+// draw outer grid
+let a = new THREE.Vector3(3000, 0, 3000);
+let b = new THREE.Vector3(-3000, 0, 3000);
+let c = new THREE.Vector3(-3000, 0, -3000);
+let d = new THREE.Vector3(3000, 0, -3000);
+export const weightGridBoundary = [a, b, c, d];
+
+export let weightGrid = getGrid(150, 150, weightGridBoundary);
+
+console.log("weightGrid=", weightGrid);
+
+
 export class NumberInputs extends React.Component {
   constructor(props) {
     super(props);
@@ -62,6 +76,11 @@ export class ToolButtons extends React.Component {
     console.log("Triggering eraser");
   }
   axis() {
+    let controlPoints = [
+      new THREE.Vector3(5000, 0, -5000),
+      new THREE.Vector3(-5000, 0, 5000),
+    ];
+    drawCurve(controlPoints)
     console.log("Triggering axis");
   }
 
@@ -146,6 +165,7 @@ export class ToolButtons extends React.Component {
     drawWeightGrid(weightGrid)
     console.log("weightGrid2=",weightGrid);
     // @todo
+    return weightGrid
   } 
 
   refreshGrid() {

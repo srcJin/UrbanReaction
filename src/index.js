@@ -27,4 +27,7 @@ root2.render(<ToolButtons />);
 root3.render(<Spacer />);
 root4.render(<Canvas />);
 
+// console.log("ReactDOM", ReactDOM)
 
+// let dom = React.createRef();
+// console.log("dom=", dom);

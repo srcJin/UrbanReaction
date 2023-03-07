@@ -51,11 +51,7 @@ export function convertJSONToPolyline(
   return group;
 }
 
-export function convertJSONToMeshes(
-  object,
-  material,
-  scale = 4
-) {
+export function convertJSONToMeshes(object, material, scale = 4) {
   let blocksThree = convertGeneratedPointListToThreeVectorList(object, scale);
   let output = redrawGeneratedMeshes(blocksThree, material);
   return output;
@@ -70,7 +66,7 @@ function redrawGeneratedMeshes(blocksThree, material) {
   let group = new THREE.Group();
 
   for (let i = 0; i < blocksThree.length; i++) {
-      group.add(setMesh(blocksThree[i], 1, material));
+    group.add(setMesh(blocksThree[i], 1, material));
   }
   // console.log("group=",group);
   return group;
@@ -104,15 +100,15 @@ function redrawGeneratedContext(blocksThree) {
   }
 }
 
-export function convertJSONToBuildings(
-  object,
-  material,
-  scale = 4
-) {
+export function convertJSONToBuildings(object, material, weightGrid, scale = 4) {
   let blocksThree = convertGeneratedPointListToThreeVectorList(object, scale);
-    let processedBlocksThree = readNearbyPoints(weightGrid, blocksThree, 300);
-    let output = redrawGeneratedBuildings(processedBlocksThree, 1, material);
-    return output;
+  let processedBlocksThree = readNearbyPoints(weightGrid, blocksThree, 150);
+  console.log(
+    "redrawGeneratedContext,processedBlocksThree=",
+    processedBlocksThree
+  );
+  let output = redrawGeneratedBuildings(processedBlocksThree, 100, material);
+  return output;
 }
 
 export function readNearbyPoints(weightGrid, blocksThree, threshold) {
@@ -145,12 +141,12 @@ export function readNearbyPoints(weightGrid, blocksThree, threshold) {
   // initiate the nearbyPoints
 
   // read nearby points
-  for (let i = 0; i < blocksThree.length; i++) {
+  for (let k = 0; k < blocksThree.length; k++) {
     // initiate nearbyPoints array
-    blocksThree[i].nearbyPoints = [];
-    for (let j = 0; j < weightGrid.points.length; j++) {
-      let gridPtX = weightGrid.points[j].point.x;
-      let gridPtZ = weightGrid.points[j].point.z;
+    blocksThree[k].nearbyPoints = [];
+    for (let m = 0; m < weightGrid.points.length; m++) {
+      let gridPtX = weightGrid.points[m].point.x;
+      let gridPtZ = weightGrid.points[m].point.z;
       // get distance between all grid points and mid points
       let distance = getDistance(
         gridPtX,
@@ -160,7 +156,7 @@ export function readNearbyPoints(weightGrid, blocksThree, threshold) {
       );
       if (distance <= threshold) {
         // push the nearby points to the block object
-        blocksThree[i].nearbyPoints.push(weightGrid.points[i]);
+        blocksThree[k].nearbyPoints.push(weightGrid.points[m]);
       }
     }
   }
@@ -174,7 +170,7 @@ function redrawGeneratedBuildings(blocksThree, heightScale = 1, material) {
   //console.log("redrawBuildings!!!!!!!!!!!!!")
 
   let sumwSize = 0;
-  let baseHeight = 100
+  let baseHeight = 100;
   let avgwSize = 0;
   let group = new THREE.Group();
   console.log("redrawGeneratedBuildings blocksThree", blocksThree);
@@ -183,7 +179,7 @@ function redrawGeneratedBuildings(blocksThree, heightScale = 1, material) {
     // read weight
 
     // @todo redraw buildings load nearbyPoints
-    
+
     sumwSize = baseHeight;
 
     for (let j = 0; j < blocksThree[i].nearbyPoints.length; j++) {

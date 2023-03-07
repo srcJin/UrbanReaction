@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import "./Buttons.css";
 import { myGenerateAll, jsonPackage } from "./generatorApi";
-import { myGenerator } from "./main";
+import { myGenerator } from "./generator/main";
 import { renderer, animate, scene } from "./Renderer";
 import {
   convertJSONToMeshes,
@@ -16,7 +16,7 @@ import {
   minorRoadMaterial,
   waterMaterial,
 } from "./renderer/Materials.js";
-import { weightGrid } from "./renderer/GridEditor";
+import { weightGrid } from "./MyTools";
 import { drawWeightGrid } from "./rendererApi";
 export class Canvas extends React.Component {
   hello() {
@@ -26,20 +26,21 @@ export class Canvas extends React.Component {
   emptyScene() {
     console.log("refreshing 3d");
     // remove meshes from scene, keep lights
-    for (let i = 0; i <= scene.children.length - 1; i++) {
+    for (let i = 0; i < scene.children.length; i++) {
       // console.log(scene);
-      if (
-        scene.children[i].type ===
-        ("Group" || "Mesh" || "Line2" || "Points" || "Points")
-      ) {
-        scene.remove(scene.children[i]);
-      }
+      if (scene.children) {
+        if (scene.children[i].type !== undefined) {
 
-      if (scene.children[i].type === "Mesh") {
-        scene.remove(scene.children[i]);
+          if (scene.children[i].type === ("Group" || "Line2" || "Points")) {
+            scene.remove(scene.children[i]);
+          }
+
+          if (scene.children[i].type === "Mesh") {
+            scene.remove(scene.children[i]);
+          }
+        }
       }
     }
-
     console.log("Canvas refresh jsonPackage = ", jsonPackage);
     renderer.setSize(500, 500);
     renderer.setPixelRatio(1);
@@ -51,30 +52,19 @@ export class Canvas extends React.Component {
   async refresh(jsonPackage) {
     console.log("refreshing 3d");
     // remove meshes from scene, keep lights
-    for (let i = scene.children.length - 1; i >= 0; i--) {
-      // console.log(scene);
-      if (
-        scene.children[i].type ===
-        ("Group" || "Line2" || "Points" || "Points" || "Mesh")
-      )
-        scene.remove(scene.children[i]);
-    }
+    this.emptyScene();
     console.log("Canvas refresh jsonPackage = ", jsonPackage);
-    scene.add(
-      convertJSONToMeshes(jsonPackage.seaPolygon, waterMaterial)
-    );
+    scene.add(convertJSONToMeshes(jsonPackage.seaPolygon, waterMaterial));
     scene.add(convertJSONToMeshes(jsonPackage.river, waterMaterial));
     scene.add(convertJSONToMeshes(jsonPackage.bigParks, greenMaterial));
-    scene.add(
-      convertJSONToMeshes(jsonPackage.smallParks, greenMaterial)
-    );
+    scene.add(convertJSONToMeshes(jsonPackage.smallParks, greenMaterial));
 
     scene.add(convertJSONToPolyline(jsonPackage.majorRoads, majorRoadMaterial));
     scene.add(convertJSONToPolyline(jsonPackage.minorRoads, minorRoadMaterial));
     scene.add(convertJSONToPolyline(jsonPackage.mainRoads, majorRoadMaterial));
     scene.add(convertJSONToPolyline(jsonPackage.coastline, coastlineMaterial));
     scene.add(
-      convertJSONToBuildings(jsonPackage.blocks, buildingMaterial)
+      convertJSONToBuildings(jsonPackage.blocks, buildingMaterial, weightGrid)
     );
 
     renderer.setSize(500, 500);
@@ -105,9 +95,7 @@ export class Canvas extends React.Component {
     }
 
     // exportJsonDelayed();
-    scene.add(
-      convertJSONToMeshes(jsonPackage.seaPolygon, waterMaterial)
-    );
+    scene.add(convertJSONToMeshes(jsonPackage.seaPolygon, waterMaterial));
     scene.add(convertJSONToMeshes(jsonPackage.river, waterMaterial));
     scene.add(convertJSONToMeshes(jsonPackage.bigParks, greenMaterial));
     scene.add(convertJSONToMeshes(jsonPackage.smallParks, greenMaterial));
@@ -116,7 +104,9 @@ export class Canvas extends React.Component {
     scene.add(convertJSONToPolyline(jsonPackage.minorRoads, minorRoadMaterial));
     scene.add(convertJSONToPolyline(jsonPackage.mainRoads, majorRoadMaterial));
     scene.add(convertJSONToPolyline(jsonPackage.coastline, coastlineMaterial));
-    scene.add(convertJSONToBuildings(jsonPackage.blocks, buildingMaterial, weightGrid));
+    scene.add(
+      convertJSONToBuildings(jsonPackage.blocks, buildingMaterial, weightGrid)
+    );
 
     //
     // three js renderer

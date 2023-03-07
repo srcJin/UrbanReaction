@@ -1,4 +1,4 @@
-import { myGenerator } from "./main";
+import { myGenerator } from "./generator/main";
 import Vector from "./generator/vector";
 
 // make jsonPackage a global variable

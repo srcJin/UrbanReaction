@@ -8,18 +8,10 @@ import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 import { LineGeometry } from "three/examples/jsm/lines/LineGeometry";
 import { getLineLength, evaluateCrv, checkLineIntersection } from "./myMath.js";
 import { getLine } from "./getGeometries.js";
+import { weightGrid } from "../MyTools.js";
 // grid parameters
 
-// draw outer grid
-let a = new THREE.Vector3(3000, 0, 3000);
-let b = new THREE.Vector3(-3000, 0, 3000);
-let c = new THREE.Vector3(-3000, 0, -3000);
-let d = new THREE.Vector3(3000, 0, -3000);
-export let weightGridBoundary = [a, b, c, d];
 
-export let weightGrid = getGrid(150, 150, weightGridBoundary);
-
-console.log("weightGrid=", weightGrid);
 
 // modified getGrid
 export function getGrid(xoff, yoff, polygon) {
