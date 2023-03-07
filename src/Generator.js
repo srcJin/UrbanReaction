@@ -27,11 +27,11 @@ export class Canvas extends React.Component {
     console.log("refreshing 3d");
     // remove meshes from scene, keep lights
     for (let i = 0; i < scene.children.length; i++) {
-      // console.log(scene);
+      console.log(scene);
       if (scene.children) {
         if (scene.children[i].type !== undefined) {
 
-          if (scene.children[i].type === ("Group" || "Line2" || "Points")) {
+          if (scene.children[i].type === ("Group" || "Line2" || "Points" || "Mesh")) {
             scene.remove(scene.children[i]);
           }
 
@@ -41,10 +41,10 @@ export class Canvas extends React.Component {
         }
       }
     }
-    console.log("Canvas refresh jsonPackage = ", jsonPackage);
+    // console.log("Canvas refresh jsonPackage = ", jsonPackage);
     renderer.setSize(500, 500);
     renderer.setPixelRatio(1);
-    console.log(scene);
+    // console.log(scene);
 
     animate();
   }
@@ -53,7 +53,7 @@ export class Canvas extends React.Component {
     console.log("refreshing 3d");
     // remove meshes from scene, keep lights
     this.emptyScene();
-    console.log("Canvas refresh jsonPackage = ", jsonPackage);
+    // console.log("Canvas refresh jsonPackage = ", jsonPackage);
     scene.add(convertJSONToMeshes(jsonPackage.seaPolygon, waterMaterial));
     scene.add(convertJSONToMeshes(jsonPackage.river, waterMaterial));
     scene.add(convertJSONToMeshes(jsonPackage.bigParks, greenMaterial));
@@ -82,8 +82,8 @@ export class Canvas extends React.Component {
     //
     // road network generator
     //
-    console.log("myGenerator", myGenerator);
-    console.log("myGenerator.tensorField", myGenerator.tensorField);
+    //console.log("myGenerator", myGenerator);
+    //console.log("myGenerator.tensorField", myGenerator.tensorField);
     // running api.js
     // await testAPI()
 

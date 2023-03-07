@@ -18,7 +18,7 @@ import { returnWeightGrid, setWeightGrid } from "./MyTools";
 import { curveChangeGrid, shapeChangeGrid } from "./renderer/GridEditor";
 
 export function drawCurve(controlPoints) {
-  console.log("star");
+  console.log("curve");
   // draw Attractor Curves
   let curveObj = getCurve(controlPoints)
   let curve = curveObj.line2
@@ -50,7 +50,8 @@ export function drawRectangle(x, y, width, height, material= new THREE.MeshBasic
     // draw Attractor Curves
     let shape = getRectangle(x, y, type, width, height, material)
     let size = width * height
-    scene.add(shape);
+    // scene.add(shape);  // disable for now, will cause error of THREE.BufferGeometry.computeBoundingSphere(): 
+    // Computed radius is NaN. The "position" attribute is likely to have NaN values. 
     shapeChangeGrid(returnWeightGrid(), type, shape, size)
 }
 

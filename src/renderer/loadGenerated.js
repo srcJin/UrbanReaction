@@ -105,19 +105,19 @@ function redrawGeneratedContext(blocksThree) {
 
 export function convertJSONToBuildings(object, material, weightGrid, scale = 4) {
   let blocksThree = convertGeneratedPointListToThreeVectorList(object, scale);
-  console.log("!!!!!!!convertJSONToBuildings processedBlocksThree, readNearbyPoints")
+  // console.log("!!!!!!!convertJSONToBuildings processedBlocksThree, readNearbyPoints")
   let processedBlocksThree = readNearbyPoints(returnWeightGrid(), blocksThree, 150);
-  console.log(
-    "redrawGeneratedContext,processedBlocksThree=",
-    processedBlocksThree
-  );
+  // console.log(
+  //   "redrawGeneratedContext,processedBlocksThree=",
+  //   processedBlocksThree
+  // );
   let output = redrawGeneratedBuildings(processedBlocksThree, 50, material);
   return output;
 }
 
 export function readNearbyPoints(weightGrid, blocksThree, threshold) {
   //console.log("findCenterPoint blockPointLists=",blockPointLists)
-  console.log("readNearbyPoints, weightGrid=",weightGrid)
+  // console.log("readNearbyPoints, weightGrid=",weightGrid)
   // get center points of building
   let centerPoint;
   // for each building in the list
@@ -166,7 +166,7 @@ export function readNearbyPoints(weightGrid, blocksThree, threshold) {
       }
     }
   }
-  console.log("blockPointLists=", blocksThree);
+  // console.log("blockPointLists=", blocksThree);
   let processedBlocksThree = blocksThree;
   return processedBlocksThree;
 }
@@ -179,7 +179,7 @@ function redrawGeneratedBuildings(blocksThree, heightScale = 1, material) {
   let baseHeight = 100;
   let avgwSize = 0;
   let group = new THREE.Group();
-  console.log("redrawGeneratedBuildings blocksThree", blocksThree);
+  // console.log("redrawGeneratedBuildings blocksThree", blocksThree);
 
   for (let i = 0; i < blocksThree.length; i++) {
     // read weight

@@ -45,7 +45,7 @@ class MainGenerator {
         this.canvas = document.getElementById(Util.CANVAS_ID);
         this.tensorCanvas = new DefaultCanvasWrapper(this.canvas);
         // Make sure we're not too zoomed out for large resolutions
-        console.log("this.domainController=",this.domainController)
+        // console.log("this.domainController=",this.domainController)
         // const screenWidth = this.domainController.screenDimensions.x;
         // if (screenWidth > this.STARTING_WIDTH) {
         //     this.domainController.zoom = screenWidth / this.STARTING_WIDTH;
@@ -178,8 +178,8 @@ class MainGenerator {
 // });
 // add functions for API
 export const myGenerator = new MainGenerator();
-console.log("myGenerator", myGenerator);
-console.log("myGenerator.tensorField", myGenerator.tensorField);
+// console.log("myGenerator", myGenerator);
+// console.log("myGenerator.tensorField", myGenerator.tensorField);
 //addRadial(centre: Vector, size: number, decay: number)
 // myGenerator.tensorField.addRadial(new Vector(400,400), 400, 10)
 //addGrid(centre: Vector, size: number, decay: number, theta: number)

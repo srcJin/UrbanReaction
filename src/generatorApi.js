@@ -18,13 +18,13 @@ export function myAddGrid(centre, size, decay, theta) {
   myGenerator.tensorField.addGrid(centre, size, decay, theta);
 }
 export function myRemoveLastField() {
-  console.log("myGenerator.tensorFieldBeforeRemove", myGenerator.tensorField);
+  // console.log("myGenerator.tensorFieldBeforeRemove", myGenerator.tensorField);
   myGenerator.tensorField.removeField(
     myGenerator.tensorField.basisFields[
       myGenerator.tensorField.basisFields.length - 1
     ]
   );
-  console.log("myGenerator.tensorFieldAfterRemove", myGenerator.tensorField);
+  // console.log("myGenerator.tensorFieldAfterRemove", myGenerator.tensorField);
 }
 // add to export json
 function exportToJsonFile(jsonData, filename) {
@@ -41,7 +41,7 @@ function exportToJsonFile(jsonData, filename) {
 export async function myGenerateAll() {
   myGenerator.mySetFirstGenerateFalse();
   const results = await myGenerator.myGenerate();
-  console.log("results=", results);
+  // console.log("results=", results);
   const coastline = results.coastline;
   const seaPolygon = results.seaPolygon;
   const river = results.river;

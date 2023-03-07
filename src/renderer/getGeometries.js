@@ -121,13 +121,21 @@ export function getCircle(posX, posZ, size, material) {
   return circleMesh;
 }
 
+// export function getRectangle(posX, posZ, width, height, material) {
+//   let planeGeometry = new THREE.PlaneGeometry(width, height);
+//   let planeMesh = new THREE.Mesh(planeGeometry, material);
+//   planeMesh.rotation.x = -Math.PI / 2;
+//   planeMesh.position.set(posX, 100, posZ);
+//   console.log("getRectangle planeMesh", planeMesh)
+//   return planeMesh;
+// }
+
 export function getRectangle(posX, posZ, width, height, material) {
-  let planeGeometry = new THREE.PlaneGeometry(width, height);
-  let planeMesh = new THREE.Mesh(planeGeometry, material);
-  planeMesh.rotation.x = -Math.PI / 2;
-  planeMesh.position.set(posX, 100, posZ);
-  console.log("getRectangle planeMesh", planeMesh)
-  return planeMesh;
+  let geometry = new THREE.BoxGeometry(width, height, 100);
+  let mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(posX, 100, posZ);
+  // console.log("getRectangle mesh", mesh)
+  return mesh;
 }
 
 // Draw individual point

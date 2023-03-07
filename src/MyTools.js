@@ -25,17 +25,17 @@ export let weightGrid = getGrid(150, 150, weightGridBoundary);
 //once it is loaded, it becomes a new weightGrid
 
 export function returnWeightGrid() {
-  console.log("returnWeightGrid,weightGrid= ",weightGrid)
+  //console.log("returnWeightGrid,weightGrid= ",weightGrid)
   return weightGrid;
 }
 
 export function setWeightGrid(newWeightGrid) {
   weightGrid = newWeightGrid;
-  console.log("setWeightGrid,weightGrid= ",weightGrid)
+  //console.log("setWeightGrid,weightGrid= ",weightGrid)
 }
 
 
-console.log("weightGrid=", weightGrid);
+// console.log("weightGrid=", weightGrid);
 
 
 export class NumberInputs extends React.Component {
@@ -157,26 +157,25 @@ export class ToolButtons extends React.Component {
 
   update3D() {
     const canvas = new Canvas();
-    console.log("RefreshButton jsonPackage = ",jsonPackage);
+    // console.log("RefreshButton jsonPackage = ",jsonPackage);
     canvas.refresh(jsonPackage);
     drawWeightGrid(weightGrid)
-
   } 
 
   initGrid() {
     console.log("initGrid");
-    console.log('initGrid weightGrid=', weightGrid);
+    // console.log('initGrid weightGrid=', weightGrid);
     // generate a new weightGrid
     weightGrid.points = []
     weightGrid.lineX = []
     weightGrid.lineZ = []
     let newGrid = getGrid(150, 150, weightGridBoundary)
-    console.log("newGrid=",newGrid);
+    // console.log("newGrid=",newGrid);
     weightGrid.points = newGrid.points
     weightGrid.lineX = newGrid.lineX
     weightGrid.lineZ = newGrid.lineZ
     drawWeightGrid(weightGrid)
-    console.log("weightGrid2=",weightGrid);
+    // console.log("weightGrid2=",weightGrid);
     // @todo
     return weightGrid
   } 

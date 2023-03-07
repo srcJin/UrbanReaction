@@ -214,7 +214,7 @@ export default class MainGUI {
         await this.minorRoads.generateRoads(this.animate);
         this.redraw = true;
         await this.buildings.generate(this.animate);
-        console.log("generateEverything(),this=",this)
+        // console.log("generateEverything(),this=",this)
 
         jsonPackage["coastline"] = [this.coastline.coastline]; // coastline here is only an array, so need to put inside an array to read normally
         jsonPackage["seaPolygon"] = [this.coastline.seaPolygon]; // seaPolygon here is only an array, so need to put inside an array to read normally

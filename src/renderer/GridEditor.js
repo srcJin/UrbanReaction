@@ -24,7 +24,7 @@ export function getGrid(xoff, yoff, polygon) {
   var b = polygon[1];
   var c = polygon[2];
   var d = polygon[3];
-  console.log("getGrid, polygon=", polygon);
+  // console.log("getGrid, polygon=", polygon);
   // step two, calculate length of curve to determine number of divisions
   var ab_length = getLineLength(a.x, a.z, b.x, b.z);
   var cd_length = getLineLength(c.x, c.z, d.x, d.z);
@@ -80,14 +80,14 @@ export function getGrid(xoff, yoff, polygon) {
       grid.push(ptObj);
     }
   }
-  console.log("getGrid return=", { points: grid, lineX: lineX, lineZ: lineZ });
+  // console.log("getGrid return=", { points: grid, lineX: lineX, lineZ: lineZ });
   return { points: grid, lineX: lineX, lineZ: lineZ };
 }
 
 
 export function curveChangeGrid(weightGrid, points, threshold) {
   if (points != null && weightGrid != []) {
-    console.log("points= ", points);
+    // console.log("points= ", points);
 
     // step 1: iterate all the points of the grid
     for (let i = 0; i < weightGrid.points.length; i++) {
@@ -106,13 +106,13 @@ export function curveChangeGrid(weightGrid, points, threshold) {
       }
     }
   }
-  console.log("weightGrid after curveChangeGrid=", weightGrid);
+  // console.log("weightGrid after curveChangeGrid=", weightGrid);
   setWeightGrid(weightGrid)
 }
 
 export function shapeChangeGrid(weightGrid, type, shape, size) {
   if (shape != null && weightGrid != []) {
-    console.log("shapeChangeGrid shape= ", shape);
+    // console.log("shapeChangeGrid shape= ", shape);
 
     // step 1: iterate all the points of the grid
     for (let i = 0; i < weightGrid.points.length; i++) {
@@ -142,7 +142,7 @@ export function shapeChangeGrid(weightGrid, type, shape, size) {
 
     }
   }
-  console.log("weightGrid after shapeChangeGrid=", weightGrid);
+  // console.log("weightGrid after shapeChangeGrid=", weightGrid);
   setWeightGrid(weightGrid)
 }
 
